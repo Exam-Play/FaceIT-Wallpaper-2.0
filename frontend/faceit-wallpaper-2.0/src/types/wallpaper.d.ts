@@ -3,3 +3,8 @@ interface Window {
         applyUserProperties?: (properties: any) => void;
     };
 }
+
+interface Position {
+    x: number;
+    y: number;
+}
