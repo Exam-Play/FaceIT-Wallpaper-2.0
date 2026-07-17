@@ -12,8 +12,9 @@ function Lock({
         cursor: 'pointer',
         color: 'white',
         position: 'absolute',
-        top: '1vw',
-        right: '1vw',
+        top: '1.5vw',
+        right: '1.5vw',
+        zIndex: 100000,
         opacity: 0.25
     }
 
@@ -25,9 +26,9 @@ function Lock({
     return (
         <div style={stylesForLock}>
             {isLocked ? (
-                <FaLock onClick={handleClick} size={'2vw'} />
+                <FaLock onClick={handleClick} size={'2.5vw'} />
             ) : (
-                <FaUnlock onClick={handleClick} size={'2vw'} />
+                <FaUnlock onClick={handleClick} size={'2.5vw'} />
             )}
         </div>
     )

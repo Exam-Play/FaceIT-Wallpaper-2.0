@@ -1,8 +1,8 @@
-import styles from './recentPerformance30Matches.module.scss';
-
 import { useMovable } from "../../hooks/useMovable";
 
-function RecentPerformance30Matches({
+import styles from './recentMatches.module.scss';
+
+function RecentMatches({
     isLocked,
     widgetOrder,
     setWidgetOrder
@@ -10,12 +10,12 @@ function RecentPerformance30Matches({
     isLocked: boolean,
     widgetOrder: string[],
     setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>
-}){
+}) {
     const { stylesForMove, ref, handleClick } = useMovable({
-        storageKey: "recPerf30MatPos",
+        storageKey: "recentMatPos",
         pos: {
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2
+            x: window.innerWidth / 8,
+            y: window.innerHeight / 8
         },
         isLocked: isLocked,
         widgetOrder: widgetOrder,
@@ -28,9 +28,9 @@ function RecentPerformance30Matches({
             ref={ref}
             style={stylesForMove}
         >
-            <p>Recent Performance 30 Matches</p>
+            <p>Recent matches</p>
         </div>
     )
 }
 
-export default RecentPerformance30Matches;
+export default RecentMatches;

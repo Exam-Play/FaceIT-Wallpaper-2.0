@@ -1,44 +1,70 @@
 import { useEffect, useRef, useState } from "react";
 
-interface Position {
-    x: number;
-    y: number;
-}
-
-let currentZIndex = 1;
-
 export const useMovable = ({
     storageKey,
     pos,
-    isLocked
+    isLocked,
+    widgetOrder,
+    setWidgetOrder
 }:{
     storageKey: string,
     pos: Position,
-    isLocked: boolean
+    isLocked: boolean,
+    widgetOrder: string[],
+    setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>
 }) => {
     const [position, setPosition] = useState(() => {
         const saved = localStorage.getItem(storageKey);
 
         return saved ? JSON.parse(saved) : pos;
     });
-    const [zIndex, setZIndex] = useState(1);
-
     const [isMoving, setIsMoving] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
-    
+    const offset = useRef({x: 0, y: 0});
+
+    const zIndex = (() => {
+        const index = widgetOrder.indexOf(storageKey);
+
+        return index === -1 ? 1 : index + 1;
+    })();
+
     const stylesForMove : React.CSSProperties = {
         left: position.x,
         top: position.y,
         position: 'absolute',
-        transform: 'translate(-50%, -50%)',
         zIndex: zIndex
     };
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (isLocked) return;
+
         if (!isMoving) {
-            currentZIndex++;
+            setWidgetOrder(prev => {
+                const order = [...prev];
+
+                const index = order.indexOf(storageKey);
+
+                if (index !== -1) {
+                    order.splice(index, 1);
+                }
+
+                order.push(storageKey);
+
+                localStorage.setItem(
+                    "widgetOrder",
+                    JSON.stringify(order)
+                );
+
+                return order;
+            });
+
+            const rect = ref.current!.getBoundingClientRect();
+
+            offset.current = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
         }
-        setZIndex(currentZIndex);
 
         setIsMoving(prev => !prev);
     };
@@ -54,14 +80,17 @@ export const useMovable = ({
             const width = rect?.width ?? 0;
             const height = rect?.height ?? 0;
 
+            const x = e.clientX - offset.current.x;
+            const y = e.clientY - offset.current.y;
+
             const newPosition = {
                 x: Math.max(
-                    width / 2,
-                    Math.min(e.clientX, window.innerWidth - width / 2)
+                    0,
+                    Math.min(x, window.innerWidth - width)
                 ),
                 y: Math.max(
-                    height / 2,
-                    Math.min(e.clientY, window.innerHeight - height / 2)
+                    0,
+                    Math.min(y, window.innerHeight - height)
                 )
             };
 
