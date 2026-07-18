@@ -1,9 +1,208 @@
+$faceit-level-1-bg:
+    radial-gradient(50cqw 70% at 50% 10%, rgba(241, 241, 241, 0.1792) 0%, rgba(241, 241, 241, 0.0768) 53.61%, rgba(241, 241, 241, 0) 100%),
+    radial-gradient(40% 70% at 50% 10%, rgba(241, 241, 241, 0.0448) 0%, rgba(241, 241, 241, 0.0192) 43.61%, rgba(241, 241, 241, 0) 100%),
+    #121212;
+
+$faceit-level-23-bg:
+    radial-gradient(50cqw 70% at 50% 10%, rgba(43, 255, 43, 0.1792) 0%, rgba(43, 255, 43, 0.0768) 53.61%, rgba(43, 255, 43, 0) 100%),
+    radial-gradient(40% 70% at 50% 10%, rgba(43, 255, 43, 0.0448) 0%, rgba(43, 255, 43, 0.0192) 43.61%, rgba(43, 255, 43, 0) 100%),
+    #121212;
+
+$faceit-level-47-bg:
+    radial-gradient(50cqw 70% at 50% 10%, rgba(255, 220, 43, .18) 0%, rgba(255, 220, 43, .08) 53.61%, rgba(255, 220, 43, 0) 100%),
+    radial-gradient(40% 70% at 50% 10%, rgba(255, 220, 43, .04) 0%, rgba(255, 220, 43, .02) 43.61%, rgba(255, 220, 43, 0) 100%),
+    #121212;
+
+$faceit-level-89-bg:
+    radial-gradient(50cqw 70% at 50% 10%, rgba(255, 97, 43, 0.1792) 0%, rgba(255, 97, 43, 0.0768) 53.61%, rgba(255, 97, 43, 0) 100%),
+    radial-gradient(40% 70% at 50% 10%, rgba(255, 97, 43, 0.0448) 0%, rgba(255, 97, 43, 0.0192) 43.61%, rgba(255, 97, 43, 0) 100%),
+    #121212;
+
+$faceit-level-1011-bg:
+    radial-gradient(50cqw 70% at 50% 10%, rgba(210, 0, 0, 0.1792) 0%, rgba(210, 0, 0, 0.0768) 53.61%, rgba(210, 0, 0, 0) 100%),
+    radial-gradient(40% 70% at 50% 10%, rgba(210, 0, 0, 0.0448) 0%, rgba(210, 0, 0, 0.0192) 43.61%, rgba(210, 0, 0, 0) 100%),
+    #121212;
+
+
+
+$faceit-level-border-1-bg:
+    linear-gradient(90deg, rgba(241, 241, 241, 0) 0%, rgba(241, 241, 241, 0.25) 15%, rgb(241, 241, 241) 40%,
+    rgb(255, 255, 255) 50%, rgb(241, 241, 241) 60%, rgba(241, 241, 241, 0.25) 85%, rgba(241, 241, 241, 0) 100%) 1 / 1 / 0 stretch;
+
+$faceit-level-border-23-bg:
+    linear-gradient(90deg, rgba(43, 255, 43, 0) 0%, rgba(43, 255, 43, 0.25) 15%, rgb(43, 255, 43) 40%,
+    rgb(120, 255, 120) 50%, rgb(43, 255, 43) 60%, rgba(43, 255, 43, 0.25) 85%, rgba(43, 255, 43, 0) 100%) 1 / 1 / 0 stretch;
+
+$faceit-level-border-47-bg:
+    linear-gradient(90deg, rgba(255, 220, 43, 0) 0%, rgba(255, 220, 43, 0.25) 15%, rgb(255, 220, 43) 40%,
+    rgb(255, 233, 120) 50%, rgb(255, 220, 43) 60%, rgba(255, 220, 43, 0.25) 85%, rgba(255, 220, 43, 0) 100%) 1 / 1 / 0 stretch;
+
+$faceit-level-border-89-bg:
+    linear-gradient(90deg, rgba(255, 97, 43, 0) 0%, rgba(255, 97, 43, 0.25) 15%, rgb(255, 97, 43) 40%,
+    rgb(255, 154, 120) 50%, rgb(255, 97, 43) 60%, rgba(255, 97, 43, 0.25) 85%, rgba(255, 97, 43, 0) 100%) 1 / 1 / 0 stretch;
+
+$faceit-level-border-1011-bg:
+    linear-gradient(90deg, rgba(210, 0, 0, 0) 0%, rgba(210, 0, 0, 0.25) 15%, rgb(210, 0, 0) 40%,
+    rgb(255, 32, 32) 50%, rgb(210, 0, 0) 60%, rgba(210, 0, 0, 0.25) 85%, rgba(210, 0, 0, 0) 100%) 1 / 1 / 0 stretch;
+
 .outerBlock {
+    container-type: inline-size;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    overflow: hidden;
 
     background-color: #121212;
     border-radius: 8px;
-    padding: 24px;
-    width: 40%;
+    width: var(--outer-w);
+    height: var(--outer-h);
+}
+
+.card {
+    font-size: min(calc(5cqw / 12 * 7), 14px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 8px;
+    padding: min(5cqw, 24px);
+    
+    &.level1 { background: $faceit-level-1-bg; }
+    
+    &.level2 { background: $faceit-level-23-bg; }
+
+    &.level3 { background: $faceit-level-23-bg; }
+
+    &.level4 { background: $faceit-level-47-bg; }
+
+    &.level5 { background: $faceit-level-47-bg; }
+
+    &.level6 { background: $faceit-level-47-bg; }
+
+    &.level7 { background: $faceit-level-47-bg; }
+
+    &.level8 { background: $faceit-level-89-bg; }
+
+    &.level9 { background: $faceit-level-89-bg; }
+
+    &.level10 { background: $faceit-level-1011-bg; }
+
+    &.level11 { background: $faceit-level-1011-bg; }
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    border-width: medium;
+    border-style: none;
+    border-color: currentcolor;
+    border-block-start: 1px solid;
+}
+
+.card.level1::before {
+    border-image: $faceit-level-border-1-bg;
+}
+
+.card.level2::before, .card.level3::before {
+    border-image: $faceit-level-border-23-bg;
+}
+
+.card.level4::before, .card.level5::before,
+.card.level6::before, .card.level7::before {
+    border-image: $faceit-level-border-47-bg;
+}
+
+.card.level8::before, .card.level9::before {
+    border-image: $faceit-level-border-89-bg;
+}
+
+.card.level10::before, .card.level11::before {
+    border-image: $faceit-level-border-1011-bg;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: min(5cqw / 6, 4px);
+
+    .level {
+        width: min(calc(5cqw / 12 * 32), 64px);
+        height: min(calc(5cqw / 12 * 32), 64px);
+    }
+
+    .elo {
+        font-size: min(calc(5cqw / 12 * 11), 22px);
+        color: white;
+    }
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    letter-spacing: 0.02em;
+    padding-top: min(calc(5cqw / 3 * 2), 16px);
+
+    .ranks {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: min(calc(5cqw / 3 * 2), 16px);
+
+        .rank {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: min(calc(5cqw / 3), 8px);
+
+            span {
+                color: #F1F1F1;
+            }
+        }
+    }
+
+    .flag {
+        width: min(calc(5cqw / 4 * 5), 30px);
+        height: min(calc(5cqw / 6 * 5), 20px);
+        border-radius: 20%;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .stats {
+        display: flex;
+        gap: min(calc(5cqw / 3 * 2), 16px);
+
+        color: rgb(167, 167, 167);
+    }
+
+    .stats b {
+        color: white;
+    }
+}
+
+.resizeHandle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 1.25vw;
+    height: 1.25vw;
+    border-radius: 3px;
+
+    &[data-active="true"] {
+        background: rgba(255, 220, 43, 0.35);
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
 }

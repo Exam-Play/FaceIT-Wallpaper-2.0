@@ -1,12 +1,17 @@
+@font-face {
+    font-family: "Play";
+    src: url("/src/assets/fonts/Play-Bold.ttf") format("truetype");
+}
+
 body {
     background-color: #060606;
     padding: 0;
     margin: 0;
     user-select: none;
+    font-family: 'Play', sans-serif;
 }
 
 main {
-    display: flex;
     max-height: 100vh;
 }
 

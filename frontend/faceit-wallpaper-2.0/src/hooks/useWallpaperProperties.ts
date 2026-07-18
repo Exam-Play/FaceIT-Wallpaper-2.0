@@ -1,24 +1,100 @@
 import { useEffect, useState } from "react";
 
 export function useWallpaperProperties() {
-    const [nickname, setNickname] = useState("");
+    const [nickname, setNickname] = useState("_ExamPlay_");
 
     useEffect(() => {
-        window.wallpaperPropertyListener ??= {};
-        
+        window.wallpaperPropertyListener = window.wallpaperPropertyListener || {};
+
         window.wallpaperPropertyListener.applyUserProperties = (properties: any) => {
+            const img = document.getElementById("background-img") as HTMLImageElement | null;
+            const video = document.getElementById("background-video") as HTMLVideoElement | null;
+            
             if (properties.nickname) {
-                setNickname(properties.nickname.value);
+                const value = properties.nickname.value?.trim();
+
+                if (value) {
+                    setNickname(value);
+                }
             }
 
             if (properties.background_color) {
-                const color : Number[] = properties.backgroundcolor.value.split(" ").map(Number);
+                const c = properties.background_color.value.split(" ").map(Number);
+                document.body.style.backgroundColor = `rgb(${c[0] * 255}, ${c[1] * 255}, ${c[2] * 255})`;
 
-                document.body.style.backgroundColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+                if (img) {
+                    img.style.display = "none";
+                    img.src = "";
+                }
+
+                if (video) {
+                    video.pause();
+                    video.removeAttribute("src");
+                    video.load();
+                    video.style.display = "none";
+                }
             }
 
             if (properties.background_image) {
-                document.body.style.backgroundImage = `url(${properties.background_image.value})`;
+                const path = properties.background_image.value;
+
+                if (path) {
+                    if (img) {
+                        img.src = `file:///${path}`;
+                        img.style.display = "block";
+                        img.style.minWidth = "100%";
+                        img.style.minHeight = "100%";
+                        img.style.objectFit = "cover";
+                        img.style.zIndex = "-1";
+                    }
+
+                    if (video) {
+                        video.pause();
+                        video.removeAttribute("src");
+                        video.load();
+                        video.style.display = "none";
+                    }
+
+                    document.body.style.backgroundColor = "transparent";
+                } else {
+                    if (img) {
+                        img.src = "";
+                        img.style.display = "none";
+                    }
+                }
+            }
+
+            if (properties.background_video) {
+                const path = properties.background_video.value;
+
+                if (path) {
+                    if (video) {
+                        video.src = `file:///${path}`;
+                        video.style.display = "block";
+                        video.autoplay = true;
+                        video.loop = true;
+                        video.muted = true;
+                        video.style.minWidth = "100%";
+                        video.style.minHeight = "100%";
+                        video.style.objectFit = "cover";
+                        video.style.zIndex = "-1";
+                        video.load();
+                        video.play().catch(() => {});
+                    }
+
+                    if (img) {
+                        img.style.display = "none";
+                    }
+
+                    document.body.style.backgroundColor = "transparent";
+                } else {
+                    if (video) {
+                        video.pause();
+                        video.removeAttribute("src");
+                        video.load();
+                        video.style.display = "none";
+                    }
+                }
             }
         };
     }, []);
