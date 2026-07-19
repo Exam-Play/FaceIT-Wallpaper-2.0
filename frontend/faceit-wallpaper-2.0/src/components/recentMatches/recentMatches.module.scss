@@ -1,9 +1,281 @@
 .outerBlock {
+    container-type: inline-size;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    overflow: hidden;
 
-    background-color: #121212;
     border-radius: 8px;
-    padding: 24px;
-    width: 40%;
+    width: var(--outer-w);
+    height: var(--outer-h);
+}
+
+.matchTable {
+    color: #f1f1f1;
+    font-size: 14px;
+    display: table;
+    position: relative;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+
+    .matchTableHead {
+        display: table-header-group;
+
+        .matchTableHeadRow {
+            display: table-row;
+        }
+
+        .faceitRating {
+            display: flex;
+            flex: 1 1 0%;
+            gap: 4px;
+            justify-content: flex-start;
+            align-items: center;
+
+            img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+
+    .matchTableBody {
+        display: table-row-group;
+
+        .matchElem {
+            display: table-row;
+
+            .matchTableCell:first-child::before {
+                content: "";
+                position: absolute;
+                inset-block: 0px;
+                inset-inline-start: 0px;
+                inline-size: 4px;
+                border-radius: 4px 0 0 4px;
+            }
+
+            &[data-result="W"] .matchTableCell:first-child::before {
+                background-color:#32d35a;
+            }
+
+            &[data-result="L"] .matchTableCell:first-child::before {
+                background-color:#ff002b;
+            }
+        }
+    }
+}
+
+.matchTableCell {
+    position: relative;
+    line-height: 1.5;
+    display: table-cell;
+    text-align: start;
+    vertical-align: middle;
+    padding: 8px 16px;
+    white-space: nowrap;
+    font-weight: bold;
+    background-color: color-mix(in srgb, #f1f1f1 5%, transparent);
+
+    .flexColumn {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1 1 0%;
+        gap: 0px;
+        justify-content: normal;
+    }
+
+    span {
+        font-family: 'Play-Regular', sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 18px;
+    }
+}
+
+.scoreCell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .resultBadge {
+        color: #060606;
+        inline-size: 20px;
+        block-size: 20px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+
+        &[data-result="W"] {
+            background-color: #32d35a;
+        }
+
+        &[data-result="L"] {
+            background-color: #ff002b;
+        }
+    }
+
+    .scoreText {
+        color: #a7a7a7;
+
+        .ownScore {
+            &[data-result="W"] { color: #32d35a; }
+            &[data-result="L"] { color: #ff002b; }
+        }
+    }
+}
+
+.matchMeta {
+    display: flex;
+    gap: 10px;
+
+    svg {
+        margin-top: 3px;
+    }
+
+    .level {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.eloBlock {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #f1f1f1;
+    font-weight: normal;
+}
+
+.eloDelta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+
+    &[data-direction="up"] { color: #32d35a; }
+    &[data-direction="down"] { color: #ff002b; }
+}
+
+.wrapperRating {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-inline-size: 38px;
+    max-inline-size: 38px;
+    max-block-size: 28px;
+    gap: 4px;
+    border-radius: 4px;
+    padding-block-start: 2px;
+    padding-block-end: 5px;
+    background: rgba(255, 255, 255, 0.16);
+    overflow: hidden;
+    user-select: none;
+
+    span {
+        font-family: 'Play-Bold', sans-serif;
+    }
+
+    &[data-low="true"] {
+        color: rgb(255, 39, 39);
+        background: rgba(255, 39, 39, 0.16);
+
+        .borderCustom {
+            background: rgba(255, 39, 39, 0.16);
+
+            &::before {
+                background: rgb(255, 39, 39);
+            }
+        }
+    }
+
+    &[data-good="true"] {
+        color: rgb(106, 222, 67);
+        background: rgba(106, 222, 67, 0.16);
+
+        .borderCustom {
+            background: rgba(106, 222, 67, 0.16);
+
+            &::before {
+                background: rgb(106, 222, 67);
+            }
+        }
+    }
+
+    &[data-high="true"] {
+        color: rgb(255, 115, 0);
+        background: linear-gradient(90deg, rgba(255, 115, 0, 0.16), rgba(252, 217, 42, 0.16));
+
+        @supports (-webkit-background-clip: text) or (background-clip: text) {
+            span {
+                background: linear-gradient(90deg, rgb(255, 115, 0), rgb(252, 217, 42)) text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+        
+        .borderCustom {
+            background: rgba(255, 115, 0, 0.16);
+
+            &::before {
+                background: linear-gradient(90deg, rgb(255, 115, 0), rgb(252, 217, 42));
+            }
+        }
+    }
+}
+
+.borderCustom {
+    position: absolute;
+    inset-inline: 0px;
+    inset-block-end: 0px;
+    block-size: 3px;
+    background-color: rgba(255, 255, 255, 0.16);
+
+    &::before {
+        content: "";
+        position: absolute;
+        block-size: 3px;
+        inset-inline-start: 0px;
+        inline-size: calc(var(--rating-ratio, 0) * 100%);
+        inset-block-end: 0px;
+        border-end-end-radius: 4px;
+        border-start-end-radius: 4px;
+        background: rgb(255, 255, 255);
+    }
+}
+
+.mapCell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+    font-family: 'Play-Regular', sans-serif;
+
+    img {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.resizeHandle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 1.25vw;
+    height: 1.25vw;
+    border-radius: 3px;
+
+    &[data-active="true"] {
+        background: rgba(255, 220, 43, 0.35);
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
 }

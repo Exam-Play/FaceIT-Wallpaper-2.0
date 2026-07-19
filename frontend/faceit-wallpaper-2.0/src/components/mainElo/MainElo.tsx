@@ -6,14 +6,11 @@ import { useResizable } from "../../hooks/useResizable"
 
 import { getRegionName, getCountryFlag } from '../../types/regionCountryFlag'
 
-import { getMainEloInfo } from "../../api/mainElo";
+import { getMainEloInfo } from "../../api/apiFetch";
 
 import styles from './mainElo.module.scss';
 
 import Rank from './Rank';
-
-const SIZE_STORAGE_KEY = "mainEloSize";
-const DEFAULT_SIZE = { w: 25, h: 20 };
 
 function MainElo({
     isLocked,
@@ -38,8 +35,8 @@ function MainElo({
     });
 
     const { size, isResizing, toggleResize } = useResizable({
-        storageKey: SIZE_STORAGE_KEY,
-        defaultSize: DEFAULT_SIZE,
+        storageKey: "mainEloSize",
+        defaultSize: { w: 25, h: 20 },
     });
 
     const [player, setPlayer] = useState<any>(null);

@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import './style.scss'
-
 import MainElo from "./components/mainElo/MainElo";
 import RecentPerformance30Matches from "./components/recentPerformance30Matches/RecentPerformance30Matches";
 import RecentMatches from "./components/recentMatches/RecentMatches";
@@ -40,6 +38,7 @@ function App() {
                 isLocked={isLocked}
                 widgetOrder={widgetOrder}
                 setWidgetOrder={setWidgetOrder}
+                nickname={nickname}
             />
 
             <Lock isLocked={isLocked} setIsLocked={setIsLocked} />

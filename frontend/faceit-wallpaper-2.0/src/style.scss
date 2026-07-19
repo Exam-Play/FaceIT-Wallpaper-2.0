@@ -1,14 +1,20 @@
 @font-face {
-    font-family: "Play";
+    font-family: "Play-Bold";
     src: url("/src/assets/fonts/Play-Bold.ttf") format("truetype");
 }
+
+@font-face {
+    font-family: "Play-Regular";
+    src: url("/src/assets/fonts/Play-Regular.ttf") format("truetype");
+}
+
 
 body {
     background-color: #060606;
     padding: 0;
     margin: 0;
     user-select: none;
-    font-family: 'Play', sans-serif;
+    font-family: 'Play-Bold', sans-serif;
 }
 
 main {
