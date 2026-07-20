@@ -1,16 +1,15 @@
 import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import cloudscraper
 
 from config import FACEIT_API_KEY
-from functions import map_match
+
+#FACEIT_API_KEY_BUILD = "d9e0c483-4196-4f8c-b40a-6cefe7ab07d5"
 
 HEADERS = { "Authorization": f"Bearer {FACEIT_API_KEY}" }
+#HEADERS = { "Authorization": f"Bearer {FACEIT_API_KEY_BUILD}" }
 
 app = FastAPI()
-
-scraper = cloudscraper.create_scraper()
 
 app.add_middleware(
     CORSMiddleware,
@@ -80,25 +79,22 @@ async def get_main_elo(nickname: str):
         "country_rank": country_rank["position"]
     }
 
-@app.get("/recent-matches")
-async def get_last_matches(nickname: str):
+@app.get("/player-id")
+async def get_player_id(nickname: str):
     async with httpx.AsyncClient() as client:
-        player_response = await client.get(
+        response = await client.get(
             "https://open.faceit.com/data/v4/players",
-            params={"nickname": nickname},
+            params={
+                "nickname": nickname,
+                "game": "cs2"
+            },
             headers=HEADERS
         )
-        player_response.raise_for_status()
-        player_data = player_response.json()
-        player_id = player_data["player_id"]
-        level = player_data["games"].get("cs2", {}).get("skill_level")
 
-        rounds_response = scraper.get(
-            f"https://www.faceit.com/api/statistics/v1/cs2/players/{player_id}/match-rounds",
-            params={"limit": 5}
-        )
+        response.raise_for_status()
 
-        rounds_response.raise_for_status()
-        rounds = rounds_response.json()["payload"]["cs2"]["match_rounds"]
+        player = response.json()
 
-        return [map_match(r, level) for r in rounds[:5]]
+        return {
+            "player_id": player["player_id"]
+        }

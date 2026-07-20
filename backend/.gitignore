@@ -1,3 +1,6 @@
 .venv
 .env
 __pycache__
+build
+faceit-server.spec
+build.txt
