@@ -2,22 +2,26 @@ import MatchElem from './MatchElem';
 import styles from './recentMatches.module.scss';
 
 import type { Match } from '../../types/wallpaper';
+import { mapMatch } from '../../api/functionsFetch';
+
 import { useEffect, useState } from 'react';
-import { getRecentMatchesInfo } from '../../api/apiFetch';
+import { getRecentMatchesInfo, getPlayerId } from '../../api/apiFetch';
 
 function MatchTableBody({
     nickname
 }:{
     nickname: string
 }){
-    const [matches, setMatches] = useState<Match[]>([]);
+    const [matches, setMatches] = useState<any>([]);
 
     useEffect(() => {
         async function loadPlayer() {
             try {
-                const data = await getRecentMatchesInfo(nickname);
+                const playerId = await getPlayerId(nickname);
 
-                setMatches(data);
+                const data = await getRecentMatchesInfo(playerId);
+
+                setMatches(data.slice(0, 5).map((r: Match) => mapMatch(r)));
             } catch (error) {
                 console.error(error);
             }
@@ -34,7 +38,7 @@ function MatchTableBody({
 
     return (
         <div className={styles.matchTableBody}>
-            {matches.map((match) => (
+            {matches.map((match : Match) => (
                 <MatchElem key={match.id} match={match} />
             ))}
         </div>

@@ -16,16 +16,34 @@ export async function getMainEloInfo(nickname: string): Promise<MainEloInfo> {
     return await response.json();
 }
 
-export async function getRecentMatchesInfo(nickname: string): Promise<Match[]> {
+export async function getPlayerId(nickname: string): Promise<string> {
     const response = await fetch(
-        `${API_URL}/recent-matches?nickname=${encodeURIComponent(nickname)}`
+        `${API_URL}/player-id?nickname=${encodeURIComponent(nickname)}`
     );
 
     if (!response.ok) {
         throw new Error(
-            `Failed to fetch player: ${response.status}`
+            `Failed to fetch player ID: ${response.status}`
         );
     }
 
-    return await response.json();
+    const data = await response.json();
+
+    return data.player_id;
+}
+
+export async function getRecentMatchesInfo(id: string): Promise<Match[]> {
+    const response = await fetch(
+        `https://www.faceit.com/api/statistics/v1/cs2/players/${id}/match-rounds?limit=30`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            `Failed to fetch matches: ${response.status}`
+        );
+    }
+
+    const data = await response.json();
+
+    return data.payload.cs2.match_rounds;
 }

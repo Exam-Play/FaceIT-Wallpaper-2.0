@@ -19,8 +19,16 @@
     border-collapse: separate;
     border-spacing: 0 4px;
 
+    .matchTableCell:last-child {
+        border-radius: 0 4px 4px 0;
+    }
+
     .matchTableHead {
         display: table-header-group;
+
+        .matchTableCell:first-child {
+            border-radius: 4px 0 0 4px;
+        }
 
         .matchTableHeadRow {
             display: table-row;
@@ -75,7 +83,7 @@
     padding: 8px 16px;
     white-space: nowrap;
     font-weight: bold;
-    background-color: color-mix(in srgb, #f1f1f1 5%, transparent);
+    background-color: #111111;
 
     .flexColumn {
         display: flex;
