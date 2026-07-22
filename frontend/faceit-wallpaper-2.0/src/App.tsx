@@ -4,7 +4,7 @@ import MainElo from "./components/mainElo/MainElo";
 import RecentPerformance30Matches from "./components/recentPerformance30Matches/RecentPerformance30Matches";
 import RecentMatches from "./components/recentMatches/RecentMatches";
 
-import Lock from "./components/Lock";
+import Buttons from "./components/Buttons";
 import { useWallpaperProperties } from "./hooks/useWallpaperProperties";
 
 function App() {
@@ -41,7 +41,7 @@ function App() {
                 nickname={nickname}
             />
 
-            <Lock isLocked={isLocked} setIsLocked={setIsLocked} />
+            <Buttons isLocked={isLocked} setIsLocked={setIsLocked} />
         </main>
     )
 }

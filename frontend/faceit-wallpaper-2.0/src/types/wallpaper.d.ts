@@ -46,3 +46,5 @@ export type Size = {
 };
 
 export type MatchResult = 'W' | 'L';
+
+export type ActiveTool = "move" | "resize" | "scale" | null;

@@ -1,7 +1,5 @@
 import styles from './recentMatches.module.scss';
 
-import faceitRating from '../../../public/images/matches/faceit_rating.svg'
-
 function MatchTableHead() {
     return (
         <div className={styles.matchTableHead}>
@@ -11,7 +9,7 @@ function MatchTableHead() {
                 <div className={styles.matchTableCell}></div>
                 <div className={styles.matchTableCell}>
                     <div className={styles.faceitRating}>
-                        <img src={faceitRating} />
+                        <img src={"./images/matches/faceit_rating.svg"} alt="Faceit Rating" />
                         Rating
                     </div>
                 </div>

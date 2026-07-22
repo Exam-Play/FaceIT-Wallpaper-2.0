@@ -23,7 +23,6 @@ const MONTHS = [
     "Dec"
 ];
 
-
 export function mapMatch(round: any) {
     const win = round.win ?? false;
 
@@ -34,7 +33,11 @@ export function mapMatch(round: any) {
     return {
         id: round.match_id,
         date: `${WEEKDAYS[start.getUTCDay()]} ${start.getUTCDate()} ${MONTHS[start.getUTCMonth()]}`,
-        time: start.toISOString().slice(11, 16),
+        time: start.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        }),
 
         result: win ? "W" : "L",
         ownScore: round.team_score ?? 0,

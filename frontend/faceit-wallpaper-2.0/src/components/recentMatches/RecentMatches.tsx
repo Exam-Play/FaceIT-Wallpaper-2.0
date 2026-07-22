@@ -1,4 +1,7 @@
 import { HiMiniArrowDownRight } from "react-icons/hi2";
+import { HiOutlineArrowsExpand } from "react-icons/hi";
+
+import { useScale } from "../../hooks/useScale";
 import { useMovable } from "../../hooks/useMovable";
 import { useResizable } from "../../hooks/useResizable";
 
@@ -17,12 +20,18 @@ function RecentMatches({
     setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>,
     nickname: string
 }) {
+    const { scale, isScaling, toggleScale } = useScale({
+        storageKey: "recentMatScale",
+        defaultScale: 1,
+    });
+
     const { stylesForMove, ref, handleClick } = useMovable({
         storageKey: "recentMatPos",
         pos: {
-            x: window.innerWidth / 8,
-            y: window.innerHeight / 8
+            x: window.innerWidth / 15,
+            y: window.innerHeight / 2.5
         },
+        scale: scale,
         isLocked: isLocked,
         widgetOrder: widgetOrder,
         setWidgetOrder: setWidgetOrder
@@ -30,7 +39,9 @@ function RecentMatches({
 
     const { size, isResizing, toggleResize } = useResizable({
         storageKey: "recentMatSize",
-        defaultSize: { w: 55, h: 20 }
+        scale: scale,
+        min: { w: 24, h: 5 },
+        defaultSize: { w: 43.26, h: 32 }
     });
 
     return (
@@ -41,6 +52,7 @@ function RecentMatches({
                 ...stylesForMove,
                 '--outer-w': `${size.w}vw`,
                 '--outer-h': `${size.h}vh`,
+                '--outer-scale': scale,
             } as React.CSSProperties}
         >
             <div className={styles.matchTable}>
@@ -56,6 +68,18 @@ function RecentMatches({
                     onClick={(e) => {
                         e.stopPropagation();
                         toggleResize(e.currentTarget.closest(`.${styles.outerBlock}`));
+                    }}
+                />
+            )}
+
+            {!isLocked && (
+                <HiOutlineArrowsExpand
+                    color='white'
+                    className={styles.scaleHandle}
+                    data-active={isScaling}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleScale(e.currentTarget.closest(`.${styles.outerBlock}`));
                     }}
                 />
             )}

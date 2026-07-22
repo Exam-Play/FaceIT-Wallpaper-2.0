@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { HiMiniArrowDownRight } from "react-icons/hi2";
+import { HiOutlineArrowsExpand } from "react-icons/hi";
 
 import { useMovable } from "../../hooks/useMovable";
 import { useResizable } from "../../hooks/useResizable"
+import { useScale } from "../../hooks/useScale";
 
 import { getRegionName, getCountryFlag } from '../../types/regionCountryFlag'
 
@@ -23,12 +25,18 @@ function MainElo({
     setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>,
     nickname: string
 }){
+    const { scale, isScaling, toggleScale } = useScale({
+        storageKey: "mainEloScale",
+        defaultScale: 1,
+    });
+
     const { stylesForMove, ref, handleClick } = useMovable({
         storageKey: "mainEloPos",
         pos: {
-            x: window.innerWidth / 4,
-            y: window.innerHeight / 4
+            x: window.innerWidth / 15,
+            y: window.innerHeight / 5
         },
+        scale: scale,
         isLocked: isLocked,
         widgetOrder: widgetOrder,
         setWidgetOrder: setWidgetOrder
@@ -36,7 +44,8 @@ function MainElo({
 
     const { size, isResizing, toggleResize } = useResizable({
         storageKey: "mainEloSize",
-        defaultSize: { w: 25, h: 20 },
+        scale: scale,
+        defaultSize: { w: 43.2, h: 18.31 },
     });
 
     const [player, setPlayer] = useState<any>(null);
@@ -81,6 +90,7 @@ function MainElo({
                 ...stylesForMove,
                 '--outer-w': `${size.w}vw`,
                 '--outer-h': `${size.h}vh`,
+                '--outer-scale': scale,
             } as React.CSSProperties}
         >
             <div className={`${styles.card} ${styles[`level${level}`]}`}>
@@ -132,6 +142,18 @@ function MainElo({
                     onClick={(e) => {
                         e.stopPropagation();
                         toggleResize(e.currentTarget.closest(`.${styles.outerBlock}`));
+                    }}
+                />
+            )}
+
+            {!isLocked && (
+                <HiOutlineArrowsExpand
+                    color='white'
+                    className={styles.scaleHandle}
+                    data-active={isScaling}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleScale(e.currentTarget.closest(`.${styles.outerBlock}`));
                     }}
                 />
             )}

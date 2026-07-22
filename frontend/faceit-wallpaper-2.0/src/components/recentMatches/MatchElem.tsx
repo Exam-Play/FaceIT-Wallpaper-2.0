@@ -40,9 +40,6 @@ function MatchElem({ match }: { match: Match }) {
  
             <div className={styles.matchTableCell}>
                 <div className={styles.matchMeta}>
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" color="rgb(167, 167, 167)" height="20" width="20">
-                        <path d="M7 5a2 2 0 11-4 0 2 2 0 014 0zm14 0a2 2 0 11-4 0 2 2 0 014 0zM5 21a2 2 0 100-4 2 2 0 000 4zm16-2a2 2 0 11-4 0 2 2 0 014 0zm-10.414-7L7.043 8.457l1.414-1.414L12 10.586l3.543-3.543 1.414 1.414L13.414 12l3.543 3.543-1.414 1.414L12 13.414l-3.543 3.543-1.414-1.414L10.586 12z" fill="currentColor"></path>
-                    </svg>
                     {level && 
                         <img className={styles.level}
                             src={`./images/levels/${level}.svg`}
@@ -52,17 +49,19 @@ function MatchElem({ match }: { match: Match }) {
 
                     <span className={styles.eloBlock}>
                         {elo.toLocaleString()}
-                        <span className={styles.eloDelta} data-direction={eloDirection}>
-                            {eloDirection === 'up' ?
-                                <svg viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg" height="12" width="12">
-                                    <path d="M0 6l1.414 1.414L5 3.828V14h2V3.828l3.586 3.586L12 6 6 0 0 6z" fill="currentColor"></path>
-                                </svg> :
-                                <svg viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg" height="12" width="12">
-                                    <path d="M0 8l1.414-1.414L5 10.172V0h2v10.172l3.586-3.586L12 8l-6 6-6-6z" fill="currentColor"></path>
-                                </svg>
-                            }
-                            {Math.abs(eloDelta)}
-                        </span>
+                        {eloDelta !== 0 &&
+                            <span className={styles.eloDelta} data-direction={eloDirection}>
+                                {eloDirection === 'up' ?
+                                    <svg viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg" height="12" width="12">
+                                        <path d="M0 6l1.414 1.414L5 3.828V14h2V3.828l3.586 3.586L12 6 6 0 0 6z" fill="currentColor"></path>
+                                    </svg> :
+                                    <svg viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg" height="12" width="12">
+                                        <path d="M0 8l1.414-1.414L5 10.172V0h2v10.172l3.586-3.586L12 8l-6 6-6-6z" fill="currentColor"></path>
+                                    </svg>
+                                }
+                                {Math.abs(eloDelta)}
+                            </span>
+                        }
                     </span>
                 </div>
             </div>

@@ -42,9 +42,9 @@ export function useWallpaperProperties() {
                     if (img) {
                         img.src = `file:///${path}`;
                         img.style.display = "block";
-                        img.style.minWidth = "100%";
-                        img.style.minHeight = "100%";
-                        img.style.objectFit = "cover";
+                        img.style.width = "100vw";
+                        img.style.height = "100vh";
+                        img.style.objectFit = "fill";
                         img.style.zIndex = "-1";
                     }
 
@@ -74,9 +74,9 @@ export function useWallpaperProperties() {
                         video.autoplay = true;
                         video.loop = true;
                         video.muted = true;
-                        video.style.minWidth = "100%";
-                        video.style.minHeight = "100%";
-                        video.style.objectFit = "cover";
+                        video.style.width = "100vw";
+                        video.style.height = "100vh";
+                        video.style.objectFit = "fill";
                         video.style.zIndex = "-1";
                         video.load();
                         video.play().catch(() => {});

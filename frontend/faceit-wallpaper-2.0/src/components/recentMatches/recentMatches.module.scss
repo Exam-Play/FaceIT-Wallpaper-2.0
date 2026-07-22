@@ -1,5 +1,37 @@
+@container (max-width: 800px) {
+    .matchTableCell:nth-child(6),
+    .matchTableCell:nth-child(7) {
+        display: none;
+    }
+}
+
+@container (max-width: 680px) {
+    .matchTableCell:nth-child(8) {
+        display: none;
+    }
+}
+
+@container (max-width: 560px) {
+    .matchTableCell:nth-child(5) {
+        display: none;
+    }
+}
+
+.matchTable {
+    height: 100%;
+}
+
+.matchTableBody {
+    height: 100%;
+}
+
+.matchElem {
+    height: calc(100% / 5);
+}
+
 .outerBlock {
-    container-type: inline-size;
+    transform-origin: top left;
+    container-type: size;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -8,6 +40,7 @@
     border-radius: 8px;
     width: var(--outer-w);
     height: var(--outer-h);
+    transform: scale(var(--outer-scale, 1));
 }
 
 .matchTable {
@@ -274,6 +307,30 @@
 .resizeHandle {
     position: absolute;
     bottom: 0;
+    right: 0;
+    width: 1.25vw;
+    height: 1.25vw;
+    border-radius: 3px;
+
+    &[data-active="true"] {
+        background: rgba(255, 220, 43, 0.35);
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+}
+
+@container (min-height: 325px) {
+    .resizeHandle {
+        bottom: 4px;
+    }
+}
+
+
+.scaleHandle {
+    position: absolute;
+    top: 4px;
     right: 0;
     width: 1.25vw;
     height: 1.25vw;

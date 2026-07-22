@@ -8,11 +8,13 @@ const DEFAULT_MAX: Size = { w: 100, h: 100 };
 export function useResizable({
     storageKey,
     defaultSize,
+    scale,
     min = DEFAULT_MIN,
     max = DEFAULT_MAX,
 }:{
     storageKey: string;
     defaultSize: Size;
+    scale: number;
     min?: Size;
     max?: Size;
 }){
@@ -35,7 +37,7 @@ export function useResizable({
             if (next && el) {
                 const rect = el.getBoundingClientRect();
 
-                originRef.current = { x: rect.left - 12, y: rect.top - 12};
+                originRef.current = { x: rect.left, y: rect.top};
             }
             return next;
         });
@@ -48,8 +50,8 @@ export function useResizable({
             const vw = window.innerWidth / 100;
             const vh = window.innerHeight / 100;
 
-            let wPx = e.clientX - originRef.current.x;
-            let hPx = e.clientY - originRef.current.y;
+            let wPx = (e.clientX - originRef.current.x) / scale + 12;
+            let hPx = (e.clientY - originRef.current.y) / scale + 12;
 
             let w = wPx / vw;
             let h = hPx / vh;

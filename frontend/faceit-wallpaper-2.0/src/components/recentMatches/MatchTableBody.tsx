@@ -39,7 +39,7 @@ function MatchTableBody({
     return (
         <div className={styles.matchTableBody}>
             {matches.map((match : Match) => (
-                <MatchElem key={match.id} match={match} />
+                <MatchElem key={match.id} match={match}/>
             ))}
         </div>
     )

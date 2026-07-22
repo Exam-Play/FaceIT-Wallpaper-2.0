@@ -5,6 +5,7 @@ import type { Position } from '../types/wallpaper'
 export const useMovable = ({
     storageKey,
     pos,
+    scale,
     isLocked,
     widgetOrder,
     setWidgetOrder
@@ -12,6 +13,7 @@ export const useMovable = ({
     storageKey: string,
     pos: Position,
     isLocked: boolean,
+    scale: number,
     widgetOrder: string[],
     setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>
 }) => {
@@ -63,8 +65,8 @@ export const useMovable = ({
             const rect = ref.current!.getBoundingClientRect();
 
             offset.current = {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
+                x: (e.clientX - rect.left) / scale,
+                y: (e.clientY - rect.top) / scale
             };
         }
 
@@ -82,8 +84,8 @@ export const useMovable = ({
             const width = rect?.width ?? 0;
             const height = rect?.height ?? 0;
 
-            const x = e.clientX - offset.current.x;
-            const y = e.clientY - offset.current.y;
+            const x = e.clientX - offset.current.x * scale;
+            const y = e.clientY - offset.current.y * scale;
 
             const newPosition = {
                 x: Math.max(
