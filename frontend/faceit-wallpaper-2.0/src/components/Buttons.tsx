@@ -31,7 +31,17 @@ function Lock({
     };
 
     const handleReset = () => {
+        const nickname = localStorage.getItem('nickname');
+        const backgroundColor = localStorage.getItem("background_color");
+        const backgroundImage = localStorage.getItem("background_image");
+        const backgroundVideo = localStorage.getItem("background_video");
+
         localStorage.clear();
+
+        localStorage.setItem('nickname', nickname || '');
+        localStorage.setItem('background_color', backgroundColor || '');
+        localStorage.setItem('background_image', backgroundImage || '');
+        localStorage.setItem('background_video', backgroundVideo || '');
         window.location.reload();
     };
 
@@ -40,7 +50,7 @@ function Lock({
             <MdRestartAlt
                 size="3.25vw"
                 style={stylesForButton}
-                onClick={handleReset}
+                onClick={!isLocked ? handleReset : undefined}
             />
 
             {isLocked ? (

@@ -1,4 +1,4 @@
-import type { MainEloInfo, Match } from '../types/wallpaper'
+import type { MainEloInfo, Match } from '../types/faceitData'
 
 const API_URL = "http://127.0.0.1:8000";
 
@@ -46,4 +46,36 @@ export async function getRecentMatchesInfo(id: string): Promise<Match[]> {
     const data = await response.json();
 
     return data.payload.cs2.match_rounds;
+}
+
+async function getActiveSeasonId(): Promise<string> {
+    const res = await fetch('https://www.faceit.com/api/statistics/v1/cs2/seasons');
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch seasons: ${res.status}`);
+    }
+
+    const data = await res.json();
+    const activeSeason = data.payload.cs2.seasons.find((s: any) => s.active);
+
+    if (!activeSeason) {
+        throw new Error('No active season found');
+    }
+
+    return activeSeason.season_id;
+}
+
+export async function getConsistency(playerId: string): Promise<number> {
+    const seasonId = await getActiveSeasonId();
+
+    const res = await fetch(
+        `https://www.faceit.com/api/statistics/v1/cs2/players/${playerId}/seasons/${seasonId}`
+    );
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch player season stats: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data.payload.cs2.extended_stats;
 }

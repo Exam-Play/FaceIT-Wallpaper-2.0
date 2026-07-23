@@ -1,3 +1,5 @@
+import type { Performance } from '../types/faceitData';
+
 const WEEKDAYS = [
     "Sun",
     "Mon",
@@ -61,7 +63,40 @@ export function mapMatch(round: any) {
     };
 }
 
-function getFaceitLevel(elo: number): number {
+export function mapPerformance(round: any): Performance {
+    const start = new Date(round.start_time);
+
+    return {
+        date: `${WEEKDAYS[start.getUTCDay()]} ${start.getUTCDate()} ${MONTHS[start.getUTCMonth()]}`,
+        time: start.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        }),
+        result: round.team_score > round.opponent_team_score ? 'W' : 'L',
+        roundsPlayed: round.rounds_played,
+
+        elo: round.elo_before,
+        eloDelta: round.elo_delta,
+
+        rating: round.faceit_rating,
+        faceitRoundSwingAvg: round.faceit_round_swing_avg,
+        rws: round.rws,
+
+        teamEloAvg: round.team_elo_avg,
+        opponentTeamEloAvg: round.opponent_team_elo_avg,
+
+        kills: round.kills,
+        deaths: round.deaths,
+        assists: round.assists,
+        headshots: round.headshots,
+
+        kd: round.kd,
+        damage: round.damage
+    };
+}
+
+export function getFaceitLevel(elo: number): number {
     if (elo >= 2001) return 10;
     if (elo >= 1751) return 9;
     if (elo >= 1531) return 8;

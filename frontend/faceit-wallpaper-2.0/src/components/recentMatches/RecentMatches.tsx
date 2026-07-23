@@ -1,3 +1,5 @@
+import styles from './recentMatches.module.scss';
+
 import { HiMiniArrowDownRight } from "react-icons/hi2";
 import { HiOutlineArrowsExpand } from "react-icons/hi";
 
@@ -5,20 +7,21 @@ import { useScale } from "../../hooks/useScale";
 import { useMovable } from "../../hooks/useMovable";
 import { useResizable } from "../../hooks/useResizable";
 
-import styles from './recentMatches.module.scss';
 import MatchTableHead from "./MatchTableHead";
 import MatchTableBody from "./MatchTableBody";
+
+import type { Match } from "../../types/faceitData";
 
 function RecentMatches({
     isLocked,
     widgetOrder,
     setWidgetOrder,
-    nickname
+    matches
 }:{
     isLocked: boolean,
     widgetOrder: string[],
     setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>,
-    nickname: string
+    matches: Match[]
 }) {
     const { scale, isScaling, toggleScale } = useScale({
         storageKey: "recentMatScale",
@@ -57,7 +60,7 @@ function RecentMatches({
         >
             <div className={styles.matchTable}>
                 <MatchTableHead />
-                <MatchTableBody nickname={nickname} />
+                <MatchTableBody matches={matches} />
             </div>
 
             {!isLocked && (

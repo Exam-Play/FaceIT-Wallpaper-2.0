@@ -1,13 +1,6 @@
 import styles from './recentMatches.module.scss';
-import type { Match } from '../../types/wallpaper';
-
-const RATING_MIN = 0.55;
-const RATING_MAX = 1.79;
-
-function getRatingRatio(rating: number) {
-    const ratio = (rating - RATING_MIN) / (RATING_MAX - RATING_MIN);
-    return Math.min(Math.max(ratio, 0), 1);
-}
+import type { Match } from '../../types/faceitData';
+import RatingBadge from '../ratingBadge/RatingBadge';
 
 function MatchElem({ match }: { match: Match }) {
     const {
@@ -15,9 +8,9 @@ function MatchElem({ match }: { match: Match }) {
         level, elo, eloDelta, rating,
         kills, deaths, assists, kd, adr, map
     } = match;
- 
+
     const eloDirection = eloDelta >= 0 ? 'up' : 'down';
- 
+
     return (
         <div className={styles.matchElem} data-result={result}>
             <div className={styles.matchTableCell}>
@@ -26,7 +19,7 @@ function MatchElem({ match }: { match: Match }) {
                     <span style={{ color: 'rgb(167, 167, 167)', fontSize: '12px' }}>{time}</span>
                 </div>
             </div>
- 
+
             <div className={styles.matchTableCell}>
                 <div className={styles.scoreCell}>
                     <div className={styles.resultBadge} data-result={result}>L</div>
@@ -37,18 +30,24 @@ function MatchElem({ match }: { match: Match }) {
                     </span>
                 </div>
             </div>
- 
+
             <div className={styles.matchTableCell}>
                 <div className={styles.matchMeta}>
-                    {level && 
+                    {(level && elo.toLocaleString() !== '0') ?
                         <img className={styles.level}
                             src={`./images/levels/${level}.svg`}
                             alt={`Skill level ${level}`}
                         />
+                        :
+                        <img className={styles.level}
+
+                            src={`./images/levels/-1.png`}
+                            alt={`Skill level Unranked`}
+                        />
                     }
 
                     <span className={styles.eloBlock}>
-                        {elo.toLocaleString()}
+                        {elo.toLocaleString() === '0' ? 'Unranked' : elo.toLocaleString()}
                         {eloDelta !== 0 &&
                             <span className={styles.eloDelta} data-direction={eloDirection}>
                                 {eloDirection === 'up' ?
@@ -65,30 +64,21 @@ function MatchElem({ match }: { match: Match }) {
                     </span>
                 </div>
             </div>
- 
+
             <div className={styles.matchTableCell}>
-                <div className={styles.wrapperRating}
-                    data-low={rating <= 0.89}
-                    data-good={rating >= 1.30 && rating <= 1.79}
-                    data-high={rating >= 1.80}
-                >
-                    <span className={styles.ratingBox}>
-                        {rating.toFixed(2)}
-                    </span>
-                    <div className={styles.borderCustom} style={{ '--rating-ratio': getRatingRatio(rating) } as React.CSSProperties}></div>
-                </div>
+                <RatingBadge rating={rating} />
             </div>
- 
-            <div className={styles.matchTableCell} style={{fontFamily: 'Play-Regular', fontWeight: 'normal'}}>
+
+            <div className={styles.matchTableCell} style={{ fontFamily: 'Play-Regular', fontWeight: 'normal' }}>
                 {kills} / {deaths} / {assists}
             </div>
-            <div className={styles.matchTableCell} style={{fontFamily: 'Play-Regular', fontWeight: 'normal'}}>
+            <div className={styles.matchTableCell} style={{ fontFamily: 'Play-Regular', fontWeight: 'normal' }}>
                 {kd.toFixed(2)}
             </div>
-            <div className={styles.matchTableCell} style={{fontFamily: 'Play-Regular', fontWeight: 'normal'}}>
+            <div className={styles.matchTableCell} style={{ fontFamily: 'Play-Regular', fontWeight: 'normal' }}>
                 {adr.toFixed(1)}
             </div>
- 
+
             <div className={styles.matchTableCell}>
                 <div className={styles.mapCell}>
                     <img src={`./images/map_icons/${map}.svg`} />
@@ -96,7 +86,7 @@ function MatchElem({ match }: { match: Match }) {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default MatchElem;

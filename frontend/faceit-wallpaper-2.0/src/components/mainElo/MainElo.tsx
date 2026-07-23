@@ -115,7 +115,7 @@ function MainElo({
                 <div className={styles.footer}>
                     <div className={styles.stats}>
                         <span><b>{matches?.toLocaleString() ?? "..."}</b> matches</span>
-                        <span><b>{wins?.toFixed(1) ?? "..."}</b> wins</span>
+                        <span><b>{wins?.toFixed(1) ?? "..."}%</b> wins</span>
                     </div>
 
                     <div className={styles.ranks}>
