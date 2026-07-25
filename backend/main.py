@@ -157,3 +157,15 @@ async def get_matches(player_id: str, season_id: str):
     matches = response.json()
 
     return matches
+
+@app.get("/skills_config")
+async def get_skills_config():
+    response = cf_manager.make_request(
+        "https://www.faceit.com/api/skills/v3/configs/games/cs2"
+    )
+
+    response.raise_for_status()
+
+    skills = response.json()
+
+    return skills
