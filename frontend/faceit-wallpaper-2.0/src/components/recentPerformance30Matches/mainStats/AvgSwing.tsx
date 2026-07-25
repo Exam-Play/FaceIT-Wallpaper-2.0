@@ -2,13 +2,13 @@ import styles from '../recentPerformance30Matches.module.scss';
 import Sparkline from '../Sparkline';
 
 function AvgSwing({
-    stats,
+    averageStats,
     swingHistory
 }:{
-    stats: Record<string, number | null>,
+    averageStats: Record<string, number | null>,
     swingHistory: number[]
 }) {
-    const roundSwing = stats.faceitRoundSwingAvg ?? 0;
+    const roundSwing = averageStats.faceitRoundSwingAvg ?? 0;
 
     function getSwingColor(roundSwing: number): string {
         if (roundSwing * 100 < 0) return 'rgba(255, 39, 39, 1)';

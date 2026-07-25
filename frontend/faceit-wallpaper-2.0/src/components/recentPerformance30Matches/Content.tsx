@@ -1,19 +1,24 @@
 import styles from './recentPerformance30Matches.module.scss';
 
-import type { ExtendedStats } from '../../types/faceitData';
+import type { ExtendedStats, SkillConfig } from '../../types/faceitData';
 
 import Rating from './mainStats/Rating';
 import Consistency from './mainStats/Consistency';
 import AvgSwing from './mainStats/AvgSwing';
+import RightPanel from './RightPanel';
 
 function Content({
-    stats,
+    averageStats,
+    rightPanelStats,
+    skills,
     extendedStats,
     teamEloAvgLevel,
     ratingHistory,
     swingHistory
 }: {
-    stats: Record<string, number | null>,
+    averageStats: Record<string, number | null>,
+    rightPanelStats: Record<string, number | null>,
+    skills: SkillConfig[],
     extendedStats: ExtendedStats,
     teamEloAvgLevel: number,
     ratingHistory: number[],
@@ -41,42 +46,48 @@ function Content({
                             alt={`Skill level ${teamEloAvgLevel}`}
                         />
                     }
-                    <span>{Math.round(((stats.teamEloAvg ?? 0) + (stats.opponentTeamEloAvg ?? 0)) / 2)}</span>
+                    <span>{Math.round(((averageStats.teamEloAvg ?? 0) + (averageStats.opponentTeamEloAvg ?? 0)) / 2)}</span>
                     <p>Avg skill level of Match</p>
                 </div>
             </div>
 
             <div className={styles.mainStats}>
-                <Rating stats={stats} ratingHistory={ratingHistory} />
+                <Rating averageStats={averageStats} ratingHistory={ratingHistory} />
 
-                <AvgSwing stats={stats} swingHistory={swingHistory} />
+                <AvgSwing averageStats={averageStats} swingHistory={swingHistory} />
 
                 <Consistency extendedStats={extendedStats} />
             </div>
 
+            <div className={styles.chartContainer}>
+                <div className={styles.chartContent}>
+                    <RightPanel rightPanelStats={rightPanelStats} skills={skills} />
+                </div>
+            </div>
+
             <div className={styles.additionalStats}>
                 <div className={styles.addStat}>
-                    <span>{stats.winRate ?? 0}%</span>
+                    <span>{averageStats.winRate ?? 0}%</span>
                     <p>Win rate</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.kills ?? 0} / {stats.deaths ?? 0} / {stats.assists ?? 0}</span>
+                    <span>{averageStats.kills ?? 0} / {averageStats.deaths ?? 0} / {averageStats.assists ?? 0}</span>
                     <p>K/D/A</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.kd ?? '0.00'}</span>
+                    <span>{averageStats.kd ?? '0.00'}</span>
                     <p>K/D</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.kr ?? '0.00'}</span>
+                    <span>{averageStats.kr ?? '0.00'}</span>
                     <p>K/R</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.hsPercent ?? 0}%</span>
+                    <span>{averageStats.hsPercent ?? 0}%</span>
                     <p>HS%</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.adr ?? '0.0'}</span>
+                    <span>{averageStats.adr ?? '0.0'}</span>
                     <p>ADR</p>
                 </div>
             </div>

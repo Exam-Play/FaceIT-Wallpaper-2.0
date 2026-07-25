@@ -7,8 +7,8 @@ import { useMovable } from "../../hooks/useMovable";
 import { useResizable } from '../../hooks/useResizable';
 import { useScale } from '../../hooks/useScale';
 
-import type { ExtendedStats, Performance } from '../../types/faceitData';
-import { averageStats } from '../../api/averagePerformance';
+import type { ExtendedStats, Performance, SkillConfig } from '../../types/faceitData';
+import { getAverageStats, getRightPanelStats } from '../../api/performance';
 import { useMemo } from 'react';
 import { getFaceitLevel } from '../../api/functionsFetch';
 import Content from './Content';
@@ -18,12 +18,14 @@ function RecentPerformance30Matches({
     widgetOrder,
     setWidgetOrder,
     matches,
+    skills,
     extendedStats
 }:{
     isLocked: boolean,
     widgetOrder: string[],
     setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>,
     matches: Performance[],
+    skills: SkillConfig[],
     extendedStats: ExtendedStats
 }){
     const { scale, isScaling, toggleScale } = useScale({
@@ -49,15 +51,20 @@ function RecentPerformance30Matches({
         defaultSize: { w: 43.26, h: 52 },
     });
 
-    const stats = useMemo(() => averageStats(matches, [
+    const averageStats = useMemo(() => getAverageStats(matches, [
         'teamEloAvg', 'opponentTeamEloAvg',
         'rating', 'faceitRoundSwingAvg',
         'winRate', 'kills', 'deaths', 'assists', 'kd', 'kr', 'hsPercent', 'adr'
     ]), [matches]);
 
+    const rightPanelStats = useMemo(() => getRightPanelStats(matches, [
+        'losses', 'wins', 'longestWinStreak', 'elo', 'eloDelta'
+    ]), [matches]);
+
     const teamEloAvgLevel = useMemo(() => getFaceitLevel(
-        Math.round(((stats.teamEloAvg ?? 0) + (stats.opponentTeamEloAvg ?? 0)) / 2)
-    ), [stats]);
+        Math.round(((averageStats.teamEloAvg ?? 0) + (averageStats.opponentTeamEloAvg ?? 0)) / 2),
+        skills
+    ), [averageStats]);
 
     const ratingHistory = matches
         .map(m => m.rating)
@@ -79,9 +86,11 @@ function RecentPerformance30Matches({
             } as React.CSSProperties}
         >
             <Content
-                stats={stats}
+                averageStats={averageStats}
+                rightPanelStats={rightPanelStats}
+                skills={skills}
                 extendedStats={extendedStats}
-                teamEloAvgLevel={teamEloAvgLevel}
+                teamEloAvgLevel={teamEloAvgLevel.skillLevel}
                 ratingHistory={ratingHistory}
                 swingHistory={swingHistory}
             />

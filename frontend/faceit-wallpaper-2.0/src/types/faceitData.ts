@@ -63,6 +63,12 @@ export interface Performance {
     damage: number;
 }
 
+export interface SkillConfig {
+    skillLevel: number,
+    min: number,
+    max: number
+}
+
 export interface ExtendedStats {
     consistency: number;
 }

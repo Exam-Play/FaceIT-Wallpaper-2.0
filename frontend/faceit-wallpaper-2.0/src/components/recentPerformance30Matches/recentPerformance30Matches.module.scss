@@ -195,6 +195,175 @@ p {
     }
 }
 
+.chartContainer {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #242424;
+
+    .chartContent {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .rightPanel {
+        letter-spacing: 0.02em;
+        font-size: 12px;
+        line-height: 16px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        gap: 24px;
+
+        background-color: color-mix(in srgb, #f1f1f1 5%, transparent);
+        padding: 16px;
+        border-radius: 4px;
+
+        .eloBar {
+            display: flex;
+            flex: 1 1 0%;
+            gap: 2px;
+            justify-content: normal;
+            align-items: normal;
+            flex-direction: column;
+
+            .eloIcons {
+                display: flex;
+                flex: 0 1 0%;
+                gap: 8px;
+                justify-content: space-between;
+                align-items: center;
+
+                img {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .progressBar {
+                inline-size: 100%;
+                display: flex;
+                position: relative;
+                gap: 4px;
+
+                .progress {
+                    block-size: 4px;
+                    margin: 4px 0px;
+                    border-radius: 4px;
+                    position: relative;
+                    inline-size: 100%;
+                    background: rgba(255, 255, 255, 0.16);
+
+                    &::before {
+                        inset-block: 0px;
+                        inset-inline-start: 0px;
+                        inline-size: var(--outer-progress);
+                        border-radius: 4px;
+                        position: absolute;
+                        content: "";
+                        background: #f50;
+                    }
+                }
+            }
+
+            .elos {
+                display: flex;
+                flex: 0 1 0%;
+                justify-content: space-between;
+                align-items: center;
+
+                span {
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .winLoseContent {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background-color: color-mix(in srgb, #f1f1f1 5%, transparent);
+            border-radius: 4px;
+            gap: 12px;
+            padding: 8px;
+        }
+
+        .winLoseBlock {
+            display: flex;
+            flex: 0 1 0%;
+            justify-content: normal;
+            align-items: center;
+            gap: 8px;
+
+            span {
+                letter-spacing: 0.0025em;
+                font-size: 16px;
+                line-height: 24px;
+
+                &.winText {
+                    color: rgb(50, 211, 90);
+                }
+
+                &.loseText {
+                    color: rgb(255, 0, 43);
+                }
+            }
+
+            div {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                inline-size: 20px;
+                block-size: 20px;
+                border-radius: 4px;
+                color: #060606;
+
+                &.win {
+                    background-color: #32d35a;
+                }
+
+                &.lose {
+                    background-color: #ff002b;
+                }
+            }
+        }
+    }
+
+    .eloWinStreakContent {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 0%;
+        justify-content: flex-end;
+        align-items: normal;
+        gap: 8px;
+
+        span {
+            font-family: 'Play Regular', sans-serif;
+            letter-spacing: 0.02em;
+            font-size: 14px;
+            line-height: 20px;
+            color: rgb(167, 167, 167);
+        }
+
+        p {
+            letter-spacing: 0.02em;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        .eloChange, .winStreak {
+            display: flex;
+            flex: 0 1 0%;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+}
+
 .additionalStats {
     display: flex;
     flex-direction: row;

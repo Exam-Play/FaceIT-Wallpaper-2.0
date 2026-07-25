@@ -3,7 +3,7 @@ type NumericPerformanceKeys = {
     [K in keyof Performance]: Performance[K] extends number ? K : never
 }[keyof Performance];
 
-type StatKey = NumericPerformanceKeys | 'adr' | 'winRate' | 'kr' | 'hsPercent';
+type StatKey = NumericPerformanceKeys | 'adr' | 'winRate' | 'wins' | 'losses' | 'kr' | 'hsPercent' | 'elo' | 'eloDelta' | 'longestWinStreak';
 
 const FIELD_PRECISION: Partial<Record<StatKey, number>> = {
     kd: 2,
@@ -39,6 +39,43 @@ export function winRate(matches: Performance[]): number | null {
     const digits = FIELD_PRECISION.winRate ?? 0;
 
     return Number(((wins / matches.length) * 100).toFixed(digits));
+}
+
+export function longestWinStreak(matches: Performance[]): number | null {
+    if (!matches || matches.length === 0) return null;
+
+    let current = 0;
+    let longest = 0;
+    
+    for (const match of matches) {
+        if (match.result === 'W') {
+            current++;
+            longest = Math.max(longest, current);
+        } else {
+            current = 0;
+        }
+    }
+    
+    return longest;
+}
+
+export function elo(matches: Performance[]): number | null {
+    const firstMatch = matches.at(0);
+    if (firstMatch && firstMatch.elo !== undefined && firstMatch.eloDelta !== undefined) {
+        return firstMatch.elo + firstMatch.eloDelta;
+    } else {
+        return null;
+    }
+}
+
+export function eloDelta(matches: Performance[]): number | null {
+    const lastElo = matches.at(0)?.elo ?? 0;
+    const lastEloDelta = matches.at(0)?.eloDelta ?? 0;
+
+    const firstElo = matches.at(-1)?.elo ?? 0;
+    const firstEloDelta = matches.at(-1)?.eloDelta ?? 0;
+
+    return (lastElo + lastEloDelta) - (firstElo + firstEloDelta);
 }
 
 export function averageKD(matches: Performance[]): number | null {
@@ -104,7 +141,7 @@ export function averageDamagePerRound(matches: Performance[]): number | null {
     return Number((totalDamage / totalRounds).toFixed(digits));
 }
 
-export function averageStats(
+export function getAverageStats(
     matches: Performance[],
     keys: StatKey[]
 ): Record<string, number | null> {
@@ -112,20 +149,51 @@ export function averageStats(
 
     for (const key of keys) {
         switch (key) {
-            case 'adr':
-                result.adr = averageDamagePerRound(matches);
+            case 'winRate':
+                result.winRate = winRate(matches);
                 break;
             case 'kd':
                 result.kd = averageKD(matches);
-                break;
-            case 'winRate':
-                result.winRate = winRate(matches);
                 break;
             case 'kr':
                 result.kr = averageKR(matches);
                 break;
             case 'hsPercent':
                 result.hsPercent = headshotPercentage(matches);
+                break;
+            case 'adr':
+                result.adr = averageDamagePerRound(matches);
+                break;
+            default:
+                result[key] = averageField(matches, key as NumericPerformanceKeys);
+        }
+    }
+
+    return result;
+}
+
+export function getRightPanelStats(
+    matches: Performance[],
+    keys: StatKey[]
+): Record<string, number | null> {
+    const result: Record<string, number | null> = {};
+
+    for (const key of keys) {
+        switch (key) {
+            case 'wins':
+                result.wins = matches.filter(m => m.result === 'W').length
+                break;
+            case 'losses':
+                result.losses = matches.filter(m => m.result === 'L').length
+                break;
+            case 'elo':
+                result.elo = elo(matches);
+                break;
+            case 'eloDelta':
+                result.eloDelta = eloDelta(matches);
+                break;
+            case 'longestWinStreak':
+                result.longestWinStreak = longestWinStreak(matches);
                 break;
             default:
                 result[key] = averageField(matches, key as NumericPerformanceKeys);

@@ -6,13 +6,13 @@ import { RATING_GOOD, RATING_HIGH, RATING_LOW } from '../../../types/faceitData'
 import Sparkline from '../Sparkline';
 
 function Rating({
-    stats,
+    averageStats,
     ratingHistory
 }:{
-    stats: Record<string, number | null>,
+    averageStats: Record<string, number | null>,
     ratingHistory: number[],
 }) {
-    const rating = stats.rating ?? 0;
+    const rating = averageStats.rating ?? 0;
     
     function getRatingColor(rating: number): string {
         if (rating <= RATING_LOW) return 'rgba(255, 39, 39, 1)';

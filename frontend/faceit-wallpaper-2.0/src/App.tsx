@@ -8,7 +8,7 @@ import Buttons from "./components/Buttons";
 
 import { useWallpaperProperties } from "./hooks/useWallpaperProperties";
 
-import { getConsistency, getPlayerId, getRecentMatchesInfo } from "./api/apiFetch";
+import { getConsistency, getPlayerId, getRecentMatchesInfo, getSkillsConfig } from "./api/apiFetch";
 import { mapMatch, mapPerformance } from "./api/functionsFetch";
 
 import type { Match, Performance } from "./types/faceitData";
@@ -24,6 +24,7 @@ function App() {
 
     const [matches, setMatches] = useState<any>([]);
     const [extendedStats, setExtendedStats] = useState<any>([]);
+    const [skills, setSkills] = useState<any>([])
 
     useEffect(() => {
         async function loadPlayer() {
@@ -34,8 +35,11 @@ function App() {
 
                 const extendedData = await getConsistency(playerId);
 
+                const skillsConfig = await getSkillsConfig();
+
                 setMatches(data);
                 setExtendedStats(extendedData);
+                setSkills(skillsConfig);
             } catch (error) {
                 console.error(error);
             }
@@ -60,6 +64,7 @@ function App() {
                 widgetOrder={widgetOrder}
                 setWidgetOrder={setWidgetOrder}
                 matches={(matches ?? []).map((r: Performance) => mapPerformance(r))}
+                skills={skills}
                 extendedStats={extendedStats}
             />
 
@@ -74,7 +79,7 @@ function App() {
                 isLocked={isLocked}
                 widgetOrder={widgetOrder}
                 setWidgetOrder={setWidgetOrder}
-                matches={(matches ?? []).slice(0, 5).map((r: Match) => mapMatch(r))}
+                matches={(matches ?? []).slice(0, 5).map((r: Match) => mapMatch(r, skills))}
             />
 
             <Buttons isLocked={isLocked} setIsLocked={setIsLocked} />

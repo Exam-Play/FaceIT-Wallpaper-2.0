@@ -1,4 +1,4 @@
-import type { MainEloInfo, Match } from '../types/faceitData'
+import type { MainEloInfo, Match, SkillConfig } from '../types/faceitData'
 
 const API_URL = "http://127.0.0.1:8000";
 
@@ -45,7 +45,7 @@ export async function getRecentMatchesInfo(id: string): Promise<Match[]> {
 
     const data = await response.json();
 
-    return data.payload.cs2.match_rounds;
+    return data.payload.cs2.match_rounds ?? data.payload.cs2.matchRounds;
 }
 
 async function getActiveSeasonId(): Promise<string> {
@@ -80,4 +80,23 @@ export async function getConsistency(playerId: string): Promise<number> {
 
     const data = await res.json();
     return data.payload.cs2.extended_stats;
+}
+
+export async function getSkillsConfig(): Promise<SkillConfig[]> {
+    const res = await fetch(
+        `${API_URL}/skills_config`
+    );
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch player season stats: ${res.status}`);
+    }
+
+    const data = await res.json();
+    const raw = data.payload.level_mappings ?? data.payload.levelMappings;
+
+    return raw.map((item: any) => ({
+        skillLevel: item.skill_level ?? item.skillLevel,
+        min: item.min,
+        max: item.max,
+    }));
 }

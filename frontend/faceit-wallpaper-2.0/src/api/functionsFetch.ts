@@ -1,4 +1,4 @@
-import type { Performance } from '../types/faceitData';
+import type { Performance, SkillConfig } from '../types/faceitData';
 
 const WEEKDAYS = [
     "Sun",
@@ -25,15 +25,19 @@ const MONTHS = [
     "Dec"
 ];
 
-export function mapMatch(round: any) {
+export function mapMatch(round: any, config: SkillConfig[]) {
     const win = round.win ?? false;
 
-    const start = new Date(round.start_time);
+    const start = new Date(round.start_time ?? round.startTime);
 
-    const roundsPlayed = round.rounds_played || 1;
+    const roundsPlayed = round.rounds_played ?? round.roundsPlayed ?? 1;
+
+    const eloBefore = round.elo_before ?? round.eloBefore ?? 0;
+    const eloDelta = round.elo_delta ?? round.eloDelta ?? 0;
 
     return {
-        id: round.match_id,
+        id: round.match_id ?? round.matchId,
+
         date: `${WEEKDAYS[start.getUTCDay()]} ${start.getUTCDate()} ${MONTHS[start.getUTCMonth()]}`,
         time: start.toLocaleTimeString([], {
             hour: "2-digit",
@@ -42,29 +46,35 @@ export function mapMatch(round: any) {
         }),
 
         result: win ? "W" : "L",
-        ownScore: round.team_score ?? 0,
-        enemyScore: round.opponent_team_score ?? 0,
 
-        level: getFaceitLevel((round.elo_before ?? 0) + (round.elo_delta ?? 0)),
+        ownScore: round.team_score ?? round.teamScore ?? 0,
+        enemyScore:
+            round.opponent_team_score ?? round.opponentTeamScore ?? 0,
 
-        elo: (round.elo_before ?? 0) + (round.elo_delta ?? 0),
-        eloDelta: round.elo_delta ?? 0,
+        level: getFaceitLevel(eloBefore + eloDelta, config).skillLevel,
 
-        rating: Number((round.faceit_rating ?? 0).toFixed(2)),
+        elo: eloBefore + eloDelta,
+        eloDelta,
+
+        rating: Number(
+            ((round.faceit_rating ?? round.faceitRating ?? 0) as number).toFixed(2)
+        ),
 
         kills: round.kills ?? 0,
         deaths: round.deaths ?? 0,
         assists: round.assists ?? 0,
 
-        kd: Number((round.kd ?? 0).toFixed(2)),
-        adr: Number(((round.damage ?? 0) / roundsPlayed).toFixed(1)),
+        kd: Number(((round.kd ?? 0) as number).toFixed(2)),
+        adr: Number(
+            (((round.damage ?? 0) as number) / roundsPlayed).toFixed(1)
+        ),
 
-        map: round.map ?? ""
+        map: round.map ?? "",
     };
 }
 
 export function mapPerformance(round: any): Performance {
-    const start = new Date(round.start_time);
+    const start = new Date(round.start_time ?? round.startTime);
 
     return {
         date: `${WEEKDAYS[start.getUTCDay()]} ${start.getUTCDate()} ${MONTHS[start.getUTCMonth()]}`,
@@ -73,18 +83,26 @@ export function mapPerformance(round: any): Performance {
             minute: "2-digit",
             hour12: false,
         }),
-        result: round.team_score > round.opponent_team_score ? 'W' : 'L',
-        roundsPlayed: round.rounds_played,
 
-        elo: round.elo_before,
-        eloDelta: round.elo_delta,
+        result:
+            ((round.team_score ?? round.teamScore) >
+            (round.opponent_team_score ?? round.opponentTeamScore))
+                ? "W"
+                : "L",
 
-        rating: round.faceit_rating,
-        faceitRoundSwingAvg: round.faceit_round_swing_avg,
+        roundsPlayed: round.rounds_played ?? round.roundsPlayed,
+
+        elo: round.elo_before ?? round.eloBefore,
+        eloDelta: round.elo_delta ?? round.eloDelta,
+
+        rating: round.faceit_rating ?? round.faceitRating,
+        faceitRoundSwingAvg:
+            round.faceit_round_swing_avg ?? round.faceitRoundSwingAvg,
         rws: round.rws,
 
-        teamEloAvg: round.team_elo_avg,
-        opponentTeamEloAvg: round.opponent_team_elo_avg,
+        teamEloAvg: round.team_elo_avg ?? round.teamEloAvg,
+        opponentTeamEloAvg:
+            round.opponent_team_elo_avg ?? round.opponentTeamEloAvg,
 
         kills: round.kills,
         deaths: round.deaths,
@@ -92,19 +110,12 @@ export function mapPerformance(round: any): Performance {
         headshots: round.headshots,
 
         kd: round.kd,
-        damage: round.damage
+        damage: round.damage,
     };
 }
 
-export function getFaceitLevel(elo: number): number {
-    if (elo >= 2001) return 10;
-    if (elo >= 1751) return 9;
-    if (elo >= 1531) return 8;
-    if (elo >= 1351) return 7;
-    if (elo >= 1201) return 6;
-    if (elo >= 1051) return 5;
-    if (elo >= 901) return 4;
-    if (elo >= 751) return 3;
-    if (elo >= 501) return 2;
-    return 1;
+export function getFaceitLevel(elo: number, config: SkillConfig[]): SkillConfig {
+    const match = config.find(({ min, max }) => elo >= min && elo <= max);
+
+    return match ?? config.find(c => c.skillLevel === 1) ?? { skillLevel: 1, min: 0, max: 0 };
 }
