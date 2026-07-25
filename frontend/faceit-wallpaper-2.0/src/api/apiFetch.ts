@@ -34,7 +34,7 @@ export async function getPlayerId(nickname: string): Promise<string> {
 
 export async function getRecentMatchesInfo(id: string): Promise<Match[]> {
     const response = await fetch(
-        `https://www.faceit.com/api/statistics/v1/cs2/players/${id}/match-rounds?limit=30`
+        `${API_URL}/match-rounds?id=${id}`
     );
 
     if (!response.ok) {
@@ -49,7 +49,9 @@ export async function getRecentMatchesInfo(id: string): Promise<Match[]> {
 }
 
 async function getActiveSeasonId(): Promise<string> {
-    const res = await fetch('https://www.faceit.com/api/statistics/v1/cs2/seasons');
+    const res = await fetch(
+        `${API_URL}/seasons`
+    );
 
     if (!res.ok) {
         throw new Error(`Failed to fetch seasons: ${res.status}`);
@@ -62,14 +64,14 @@ async function getActiveSeasonId(): Promise<string> {
         throw new Error('No active season found');
     }
 
-    return activeSeason.season_id;
+    return activeSeason.season_id ?? activeSeason.seasonId;
 }
 
 export async function getConsistency(playerId: string): Promise<number> {
     const seasonId = await getActiveSeasonId();
 
     const res = await fetch(
-        `https://www.faceit.com/api/statistics/v1/cs2/players/${playerId}/seasons/${seasonId}`
+        `${API_URL}/extended_stats?player_id=${playerId}&season_id=${seasonId}`
     );
 
     if (!res.ok) {

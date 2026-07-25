@@ -56,27 +56,27 @@ function Content({
 
             <div className={styles.additionalStats}>
                 <div className={styles.addStat}>
-                    <span>{stats.winRate}%</span>
+                    <span>{stats.winRate ?? 0}%</span>
                     <p>Win rate</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.kills} / {stats.deaths} / {stats.assists}</span>
+                    <span>{stats.kills ?? 0} / {stats.deaths ?? 0} / {stats.assists ?? 0}</span>
                     <p>K/D/A</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.kd}</span>
+                    <span>{stats.kd ?? '0.00'}</span>
                     <p>K/D</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.kr}</span>
+                    <span>{stats.kr ?? '0.00'}</span>
                     <p>K/R</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.hsPercent}%</span>
+                    <span>{stats.hsPercent ?? 0}%</span>
                     <p>HS%</p>
                 </div>
                 <div className={styles.addStat}>
-                    <span>{stats.adr}</span>
+                    <span>{stats.adr ?? '0.0'}</span>
                     <p>ADR</p>
                 </div>
             </div>
