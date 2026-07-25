@@ -4,3 +4,5 @@ __pycache__
 build
 faceit-server.spec
 build.txt
+main_build.py
+cf_cookies.pkl

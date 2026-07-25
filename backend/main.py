@@ -3,17 +3,39 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import FACEIT_API_KEY
-
-#FACEIT_API_KEY_BUILD = "d9e0c483-4196-4f8c-b40a-6cefe7ab07d5"
+from cloudflare_manage import CloudflareManager
 
 HEADERS = { "Authorization": f"Bearer {FACEIT_API_KEY}" }
-#HEADERS = { "Authorization": f"Bearer {FACEIT_API_KEY_BUILD}" }
+
+cf_manager = CloudflareManager()
+
+def test_faceit_connection():
+    try:
+        print("Тестирование соединения с Faceit API...")
+        response = cf_manager.make_request(
+            "https://www.faceit.com/api/statistics/v1/cs2/seasons"
+        )
+        if response and response.status_code == 200:
+            print("Соединение с Faceit API успешно установлено")
+            return True
+        else:
+            print(f"Ошибка соединения: {response.status_code if response else 'No response'}")
+            return False
+    except Exception as e:
+        print(f"Ошибка тестирования: {e}")
+        return False
+
+if not test_faceit_connection():
+    print("Не удалось установить соединение с Faceit API. Проверьте cookies.")
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"]
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True
 )
 
 @app.get("/main-elo")
@@ -98,3 +120,40 @@ async def get_player_id(nickname: str):
         return {
             "player_id": player["player_id"]
         }
+
+@app.get("/seasons")
+async def get_player_id():
+    async with httpx.AsyncClient() as client:
+        response = cf_manager.make_request(
+            "https://www.faceit.com/api/statistics/v1/cs2/seasons"
+        )
+
+        response.raise_for_status()
+
+        seasons = response.json()
+
+        return seasons
+
+@app.get("/match-rounds")
+async def get_matches(id: str):
+    response = cf_manager.make_request(
+        f"https://www.faceit.com/api/statistics/v1/cs2/players/{id}/match-rounds?limit=30"
+    )
+
+    response.raise_for_status()
+
+    matches = response.json()
+
+    return matches
+
+@app.get("/extended_stats")
+async def get_matches(player_id: str, season_id: str):
+    response = cf_manager.make_request(
+        f"https://www.faceit.com/api/statistics/v1/cs2/players/{player_id}/seasons/{season_id}"
+    )
+
+    response.raise_for_status()
+
+    matches = response.json()
+
+    return matches
