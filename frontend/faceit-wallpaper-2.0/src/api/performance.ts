@@ -69,11 +69,19 @@ export function elo(matches: Performance[]): number | null {
 }
 
 export function eloDelta(matches: Performance[]): number | null {
-    const lastElo = matches.at(0)?.elo ?? 0;
-    const lastEloDelta = matches.at(0)?.eloDelta ?? 0;
+    if (!matches.length) return null;
 
-    const firstElo = matches.at(-1)?.elo ?? 0;
-    const firstEloDelta = matches.at(-1)?.eloDelta ?? 0;
+    const last = matches.at(0);
+    if (!last || last.isCalibrating) return null;
+
+    const lastElo = last.elo;
+    const lastEloDelta = last.eloDelta;
+
+    const firstTracked = [...matches].reverse().find(m => !m.isCalibrating);
+    if (!firstTracked) return null;
+
+    const firstElo = firstTracked.elo;
+    const firstEloDelta = firstTracked.eloDelta;
 
     return (lastElo + lastEloDelta) - (firstElo + firstEloDelta);
 }

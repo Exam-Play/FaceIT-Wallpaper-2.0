@@ -4,28 +4,30 @@ import styles from '../recentPerformance30Matches.module.scss';
 
 function Consistency({
     extendedStats
-}:{
+}: {
     extendedStats: ExtendedStats
 }) {
+    const consistency = extendedStats?.consistency ?? 0;
+
     const data = [
-        { value: extendedStats.consistency, fill: "currentColor" },
-        { value: 1 - extendedStats.consistency, fill: "#2E2E2E" },
+        { value: consistency, fill: "currentColor" },
+        { value: 1 - consistency, fill: "#2E2E2E" },
     ];
 
     return (
         <div className={`${styles.cell} ${styles.consistency}`}>
             <div>
-                <span className={styles.consistencyValue} 
-                    data-negative={extendedStats.consistency <= 0.30}
-                    data-good={extendedStats.consistency >= 0.70}
+                <span className={styles.consistencyValue}
+                    data-negative={consistency <= 0.30}
+                    data-good={consistency >= 0.70}
                 >
-                    {Math.round((extendedStats.consistency ?? 0) * 100)}%
+                    {Math.round(consistency * 100)}%
                 </span>
                 <p>Consistency</p>
             </div>
             <div className={styles.consistencyRing}
-                data-negative={extendedStats.consistency <= 0.30}
-                data-good={extendedStats.consistency >= 0.70}
+                data-negative={consistency <= 0.30}
+                data-good={consistency >= 0.70}
             >
                 <PieChart width={54} height={54}>
                     <Pie data={data} dataKey="value"

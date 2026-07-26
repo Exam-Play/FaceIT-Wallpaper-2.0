@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import styles from './recentPerformance30Matches.module.scss';
 
 import { HiOutlineArrowsExpand } from 'react-icons/hi';
@@ -8,9 +9,10 @@ import { useResizable } from '../../hooks/useResizable';
 import { useScale } from '../../hooks/useScale';
 
 import type { ExtendedStats, Performance, SkillConfig } from '../../types/faceitData';
+
 import { getAverageStats, getRightPanelStats } from '../../api/performance';
-import { useMemo } from 'react';
 import { getFaceitLevel } from '../../api/functionsFetch';
+
 import Content from './Content';
 
 function RecentPerformance30Matches({
@@ -73,7 +75,10 @@ function RecentPerformance30Matches({
     const swingHistory = matches
         .map(m => m.faceitRoundSwingAvg)
         .filter((v): v is number => typeof v === 'number' && !Number.isNaN(v))
-    
+
+    const winHistory = matches.map(m => m.result === 'W');
+    const eloHistory = matches.map(m => m.isCalibrating ? null : m.elo + m.eloDelta);
+
     return (
         <div className={styles.outerBlock}
             onClick={handleClick}
@@ -93,6 +98,8 @@ function RecentPerformance30Matches({
                 teamEloAvgLevel={teamEloAvgLevel.skillLevel}
                 ratingHistory={ratingHistory}
                 swingHistory={swingHistory}
+                eloHistory={eloHistory}
+                winHistory={winHistory}
             />
 
             {!isLocked && (

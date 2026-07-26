@@ -93,6 +93,7 @@ export function mapPerformance(round: any): Performance {
         roundsPlayed: round.rounds_played ?? round.roundsPlayed,
 
         elo: round.elo_before ?? round.eloBefore,
+        isCalibrating: round.is_calibrating ?? round.isCalibrating,
         eloDelta: round.elo_delta ?? round.eloDelta,
 
         rating: round.faceit_rating ?? round.faceitRating,

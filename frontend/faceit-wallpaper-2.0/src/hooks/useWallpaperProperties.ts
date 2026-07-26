@@ -3,7 +3,7 @@ import { setBackgroundColor, setBackgroundImage, setBackgroundVideo } from "../a
 
 export function useWallpaperProperties() {
     const [nickname, setNickname] = useState(
-        () => localStorage.getItem("nickname") ?? "donk666"
+        () => localStorage.getItem("nickname") ?? "_ExamPlay_"
     );
 
     useEffect(() => {

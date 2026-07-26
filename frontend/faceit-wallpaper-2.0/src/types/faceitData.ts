@@ -9,6 +9,18 @@ export type MatchResult = 'W' | 'L';
 
 export type ActiveTool = "move" | "resize" | "scale" | null;
 
+export type ConsistencyResult = {
+    extendedStats: ExtendedStats;
+    eloHistory: number[];
+};
+
+export type EloPoint = {
+    match: number;
+    value: number | null;
+    isWin: boolean;
+    isPlaceholder: boolean;
+};
+
 export interface MainEloInfo {
     nickname: string;
     avatar?: string;
@@ -45,6 +57,7 @@ export interface Performance {
     roundsPlayed: number;
     
     elo: number;
+    isCalibrating: boolean;
     eloDelta: number;
 
     rating: number;

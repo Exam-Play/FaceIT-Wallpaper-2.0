@@ -6,6 +6,7 @@ import Rating from './mainStats/Rating';
 import Consistency from './mainStats/Consistency';
 import AvgSwing from './mainStats/AvgSwing';
 import RightPanel from './RightPanel';
+import ChartElo from './chartElo/ChartElo';
 
 function Content({
     averageStats,
@@ -14,7 +15,9 @@ function Content({
     extendedStats,
     teamEloAvgLevel,
     ratingHistory,
-    swingHistory
+    swingHistory,
+    eloHistory,
+    winHistory
 }: {
     averageStats: Record<string, number | null>,
     rightPanelStats: Record<string, number | null>,
@@ -22,9 +25,10 @@ function Content({
     extendedStats: ExtendedStats,
     teamEloAvgLevel: number,
     ratingHistory: number[],
-    swingHistory: number[]
+    swingHistory: number[],
+    eloHistory: (number | null)[],
+    winHistory: boolean[]
 }) {
-
     return (
         <div className={styles.content}>
             <div className={styles.recentPerf}>
@@ -61,6 +65,13 @@ function Content({
 
             <div className={styles.chartContainer}>
                 <div className={styles.chartContent}>
+                    <ChartElo
+                        skills={skills}
+                        eloHistory={eloHistory.reverse()}
+                        winHistory={winHistory.reverse()}
+                        seasonResetIndex={eloHistory.findIndex(elo => elo === null)}
+                        seasonFinishCalbrating={eloHistory.findLastIndex(elo => elo === null) + 1}
+                    />
                     <RightPanel rightPanelStats={rightPanelStats} skills={skills} />
                 </div>
             </div>

@@ -204,6 +204,38 @@ p {
         display: flex;
         flex-direction: row;
         gap: 8px;
+
+        .chartElo {
+            flex: 1 1 0%;
+            min-width: 0;
+            user-select: none;
+
+            .tickIconWrapper {
+                display: flex;
+                align-items: center;
+                height: 100%;
+            }
+
+            .skillIconWrapper {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+
+                .level {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .skillBadge {
+                font-family: 'Play Regular', sans-serif;
+                letter-spacing: 0.02em;
+                font-size: 12px;
+                line-height: 16px;
+                color: rgb(167, 167, 167);
+            }
+        }
     }
 
     .rightPanel {

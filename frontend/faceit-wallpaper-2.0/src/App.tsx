@@ -24,7 +24,7 @@ function App() {
 
     const [matches, setMatches] = useState<any>([]);
     const [extendedStats, setExtendedStats] = useState<any>([]);
-    const [skills, setSkills] = useState<any>([])
+    const [skills, setSkills] = useState<any>([]);
 
     useEffect(() => {
         async function loadPlayer() {
@@ -38,7 +38,9 @@ function App() {
                 const skillsConfig = await getSkillsConfig();
 
                 setMatches(data);
+
                 setExtendedStats(extendedData);
+
                 setSkills(skillsConfig);
             } catch (error) {
                 console.error(error);

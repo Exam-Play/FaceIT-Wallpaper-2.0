@@ -79,7 +79,7 @@ export async function getConsistency(playerId: string): Promise<number> {
     }
 
     const data = await res.json();
-    return data.payload.cs2.extended_stats;
+    return data.payload.cs2.extended_stats ?? data.payload.cs2.extendedStats;
 }
 
 export async function getSkillsConfig(): Promise<SkillConfig[]> {
