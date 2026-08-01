@@ -122,20 +122,19 @@ async def get_player_id(nickname: str):
         }
 
 @app.get("/seasons")
-async def get_player_id():
-    async with httpx.AsyncClient() as client:
-        response = cf_manager.make_request(
-            "https://www.faceit.com/api/statistics/v1/cs2/seasons"
-        )
+def get_player_id():
+    response = cf_manager.make_request(
+        "https://www.faceit.com/api/statistics/v1/cs2/seasons"
+    )
 
-        response.raise_for_status()
+    response.raise_for_status()
 
-        seasons = response.json()
+    seasons = response.json()
 
-        return seasons
+    return seasons
 
 @app.get("/match-rounds")
-async def get_matches(id: str):
+def get_matches(id: str):
     response = cf_manager.make_request(
         f"https://www.faceit.com/api/statistics/v1/cs2/players/{id}/match-rounds?limit=30"
     )
@@ -147,7 +146,7 @@ async def get_matches(id: str):
     return matches
 
 @app.get("/extended_stats")
-async def get_matches(player_id: str, season_id: str):
+def get_matches(player_id: str, season_id: str):
     response = cf_manager.make_request(
         f"https://www.faceit.com/api/statistics/v1/cs2/players/{player_id}/seasons/{season_id}"
     )
@@ -159,7 +158,7 @@ async def get_matches(player_id: str, season_id: str):
     return matches
 
 @app.get("/skills_config")
-async def get_skills_config():
+def get_skills_config():
     response = cf_manager.make_request(
         "https://www.faceit.com/api/skills/v3/configs/games/cs2"
     )
