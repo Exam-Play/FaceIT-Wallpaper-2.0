@@ -5,8 +5,6 @@ A live [Wallpaper Engine](https://www.wallpaperengine.io/) widget that shows you
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Release](https://img.shields.io/github/v/release/Exam-Play/FaceIT-Wallpaper-2.0?include_prereleases)
 
-> Replace `Exam-Play` above (and throughout this file) with your actual GitHub username/org once the repo is public.
-
 ---
 
 ## Features
