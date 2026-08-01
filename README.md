@@ -138,4 +138,4 @@ Issues and pull requests are welcome. If you're adding a new stats panel or endp
 
 Distributed under the MIT License. See [`LICENSE`](./LICENSE) for details.
 
-© 2026 <your name / handle>
+© 2026 <Andrew / Exam-Play>
