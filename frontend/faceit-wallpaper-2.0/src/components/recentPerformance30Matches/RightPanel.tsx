@@ -60,7 +60,7 @@ function RightPanel({
                 </div>
                 <div className={styles.eloChange}>
                     <span>Elo change</span>
-                    <p>{(rightPanelStats.eloDelta ?? 0) >= 0 ? '+' : null}{rightPanelStats.eloDelta}</p>
+                    <p>{(rightPanelStats.eloDelta ?? 0) >= 0 ? '+' : null}{rightPanelStats.eloDelta ?? 0}</p>
                 </div>
                 <div className={styles.customBorder}/>
                 <div className={styles.winStreak}>

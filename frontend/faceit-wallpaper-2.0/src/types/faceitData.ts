@@ -22,13 +22,15 @@ export type EloPoint = {
 };
 
 export interface MainEloInfo {
+    matches: number;
     nickname: string;
-    avatar?: string;
     country: string;
     region: string;
     elo: number;
     level: number;
-    region_rank: number | null;
+    win_rate: number;
+    region_rank: number;
+    country_rank: number;
 }
  
 export interface Match {

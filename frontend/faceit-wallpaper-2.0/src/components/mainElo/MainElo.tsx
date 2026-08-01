@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { HiMiniArrowDownRight } from "react-icons/hi2";
 import { HiOutlineArrowsExpand } from "react-icons/hi";
 
@@ -8,22 +7,21 @@ import { useScale } from "../../hooks/useScale";
 
 import { getRegionName, getCountryFlag } from '../../types/regionCountryFlag'
 
-import { getMainEloInfo } from "../../api/apiFetch";
-
 import styles from './mainElo.module.scss';
 
 import Rank from './Rank';
+import type { MainEloInfo } from '../../types/faceitData';
 
 function MainElo({
+    player,
     isLocked,
     widgetOrder,
-    setWidgetOrder,
-    nickname
+    setWidgetOrder
 }:{
+    player: MainEloInfo,
     isLocked: boolean,
     widgetOrder: string[],
-    setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>,
-    nickname: string
+    setWidgetOrder: React.Dispatch<React.SetStateAction<string[]>>
 }){
     const { scale, isScaling, toggleScale } = useScale({
         storageKey: "mainEloScale",
@@ -48,39 +46,17 @@ function MainElo({
         defaultSize: { w: 43.2, h: 18.31 },
     });
 
-    const [player, setPlayer] = useState<any>(null);
+    const matches = player.matches ?? 0;
+    const wins = player.win_rate ?? 0;
 
-    useEffect(() => {
-        async function loadPlayer() {
-            try {
-                const data = await getMainEloInfo(nickname);
+    const elo = player.elo;
+    const level = player.level;
 
-                setPlayer(data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
+    const regionName = getRegionName(player.region ?? 0).toLowerCase().replaceAll(' ', '_');
+    const countryCode = player.country ?? 0;
 
-        loadPlayer();
-
-        const interval = setInterval(() => {
-            loadPlayer();
-        }, 30000);
-
-        return () => clearInterval(interval);
-    }, [nickname]);
-
-    const matches = player?.matches;
-    const wins = player?.win_rate;
-
-    const elo = player?.elo;
-    const level = player?.level;
-
-    const regionName = getRegionName(player?.region).toLowerCase().replaceAll(' ', '_');
-    const countryCode = player?.country;
-
-    const countryRank = player?.country_rank;
-    const regionRank = player?.region_rank;
+    const countryRank = player.country_rank ?? 0;
+    const regionRank = player.region_rank ?? 0;
 
     return (
         <div className={styles.outerBlock}
@@ -95,6 +71,13 @@ function MainElo({
         >
             <div className={`${styles.card} ${styles[`level${level}`]}`}>
                 <div className={styles.center}>
+                    {!level &&
+                        <img className={styles.level}
+                            src={`./images/levels/-1.png`}
+                            alt={`Skill level Unranked`}
+                        />
+                    }
+
                     {level && (regionRank > 1000 || regionRank === 0) && 
                         <img className={styles.level}
                             src={`./images/levels/${level}.svg`}
@@ -109,26 +92,26 @@ function MainElo({
                         />
                     }
 
-                    <span className={styles.elo}>{elo?.toLocaleString() ?? "..."}</span>
+                    <span className={styles.elo}>{elo ?? "---"}</span>
                 </div>
 
                 <div className={styles.footer}>
                     <div className={styles.stats}>
-                        <span><b>{matches?.toLocaleString() ?? "..."}</b> matches</span>
-                        <span><b>{wins?.toFixed(1) ?? "..."}%</b> wins</span>
+                        <span><b>{matches?.toLocaleString() ?? "0"}</b> matches</span>
+                        <span><b>{wins?.toFixed(1) ?? "0.0"}%</b> wins</span>
                     </div>
 
                     <div className={styles.ranks}>
                         <Rank
                             code={countryCode}
                             url={countryCode && `https://flagcdn.com/${getCountryFlag(countryCode.toLowerCase())}.svg`}
-                            rank={countryRank}
+                            rank={countryRank.toString()}
                         />
 
                         <Rank
                             code={regionName}
                             url={regionName && `https://cdn-frontend.faceit-cdn.net/web-next/_next/static/media/${regionName}.svg`}
-                            rank={regionRank}
+                            rank={regionRank.toString()}
                         />
                     </div>
                 </div>

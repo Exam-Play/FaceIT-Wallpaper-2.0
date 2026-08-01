@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { setBackgroundColor, setBackgroundImage, setBackgroundVideo } from "../api/functionsWallpaper";
+
+const NICKNAME_DEBOUNCE_MS = 1000;
 
 export function useWallpaperProperties() {
     const [nickname, setNickname] = useState(
         () => localStorage.getItem("nickname") ?? "_ExamPlay_"
     );
+
+    const nicknameDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         const backgroundColor = localStorage.getItem("background_color");
@@ -32,9 +36,15 @@ export function useWallpaperProperties() {
             if (properties.nickname) {
                 const value = properties.nickname.value?.trim();
 
+                if (nicknameDebounceRef.current) {
+                    clearTimeout(nicknameDebounceRef.current);
+                }
+
                 if (value) {
-                    setNickname(value);
-                    localStorage.setItem("nickname", value);
+                    nicknameDebounceRef.current = setTimeout(() => {
+                        setNickname(value);
+                        localStorage.setItem("nickname", value);
+                    }, NICKNAME_DEBOUNCE_MS);
                 }
             }
 

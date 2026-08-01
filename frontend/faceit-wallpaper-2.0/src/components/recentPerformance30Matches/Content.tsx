@@ -31,36 +31,38 @@ function Content({
 }) {
     return (
         <div className={styles.content}>
-            <div className={styles.recentPerf}>
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="whiteLowEmphasis" height="20" width="20">
-                    <path d="M5 9h3v10H5V9zm5.5-4h3v14h-3V5zm5.5 8h3v6h-3v-6z" fill="currentColor"></path>
-                </svg>
-                <p>Recent performance</p>
-            </div>
-
-            <div className={styles.customBorder}></div>
-
-            <div className={styles.avgEloOfMatch}>
-                <p>Last 30 Matches</p>
-                <span className={styles.dot}>•</span>
-                <div className={styles.avgEloOfMatchFlex}>
-                    {teamEloAvgLevel &&
-                        <img className={styles.teamEloAvgLevel}
-                            src={`./images/levels/${teamEloAvgLevel}.svg`}
-                            alt={`Skill level ${teamEloAvgLevel}`}
-                        />
-                    }
-                    <span>{Math.round(((averageStats.teamEloAvg ?? 0) + (averageStats.opponentTeamEloAvg ?? 0)) / 2)}</span>
-                    <p>Avg skill level of Match</p>
+            <div className={styles.flexHeader}>
+                <div className={styles.recentPerf}>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="whiteLowEmphasis" height="20" width="20">
+                        <path d="M5 9h3v10H5V9zm5.5-4h3v14h-3V5zm5.5 8h3v6h-3v-6z" fill="currentColor"></path>
+                    </svg>
+                    <p>Recent performance</p>
                 </div>
-            </div>
 
-            <div className={styles.mainStats}>
-                <Rating averageStats={averageStats} ratingHistory={ratingHistory} />
+                <div className={styles.customBorder}></div>
 
-                <AvgSwing averageStats={averageStats} swingHistory={swingHistory} />
+                <div className={styles.avgEloOfMatch}>
+                    <p>Last 30 Matches</p>
+                    <span className={styles.dot}>•</span>
+                    <div className={styles.avgEloOfMatchFlex}>
+                        {teamEloAvgLevel &&
+                            <img className={styles.teamEloAvgLevel}
+                                src={`./images/levels/${teamEloAvgLevel}.svg`}
+                                alt={`Skill level ${teamEloAvgLevel}`}
+                            />
+                        }
+                        <span>{Math.round(((averageStats.teamEloAvg ?? 0) + (averageStats.opponentTeamEloAvg ?? 0)) / 2)}</span>
+                        <p>Avg skill level of Match</p>
+                    </div>
+                </div>
 
-                <Consistency extendedStats={extendedStats} />
+                <div className={styles.mainStats}>
+                    <Rating averageStats={averageStats} ratingHistory={ratingHistory} />
+
+                    <AvgSwing averageStats={averageStats} swingHistory={swingHistory} />
+
+                    <Consistency extendedStats={extendedStats} />
+                </div>
             </div>
 
             <div className={styles.chartContainer}>

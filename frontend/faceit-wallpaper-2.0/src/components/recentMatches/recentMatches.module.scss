@@ -104,7 +104,23 @@
                 background-color:#ff002b;
             }
         }
+
+        .matchElem[data-empty="true"] {
+            .matchTableCell {
+                background-color: #0a0a0a;
+            }
+
+            .matchTableCell:first-child::before {
+                background-color: rgba(255, 255, 255, 0.08);
+            }
+        }
     }
+}
+
+.emptyDash {
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Play-Regular', sans-serif;
+    font-weight: normal;
 }
 
 .matchTableCell {

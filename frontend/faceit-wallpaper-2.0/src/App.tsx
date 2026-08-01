@@ -8,7 +8,7 @@ import Buttons from "./components/Buttons";
 
 import { useWallpaperProperties } from "./hooks/useWallpaperProperties";
 
-import { getConsistency, getPlayerId, getRecentMatchesInfo, getSkillsConfig } from "./api/apiFetch";
+import { getConsistency, getMainEloInfo, getPlayerId, getRecentMatchesInfo, getSkillsConfig } from "./api/apiFetch";
 import { mapMatch, mapPerformance } from "./api/functionsFetch";
 
 import type { Match, Performance } from "./types/faceitData";
@@ -22,28 +22,37 @@ function App() {
     const [isLocked, setIsLocked] = useState(localStorage.getItem('isLocked') === 'true');
     const { nickname } = useWallpaperProperties();
 
+    const [player, setPlayer] = useState<any>([]);
     const [matches, setMatches] = useState<any>([]);
     const [extendedStats, setExtendedStats] = useState<any>([]);
     const [skills, setSkills] = useState<any>([]);
 
     useEffect(() => {
+        let cancelled = false;
+
         async function loadPlayer() {
             try {
                 const playerId = await getPlayerId(nickname);
+                if (cancelled) return;
+
+                const mainEloData = await getMainEloInfo(nickname);
+                if (cancelled) return;
 
                 const data = await getRecentMatchesInfo(playerId);
+                if (cancelled) return;
 
                 const extendedData = await getConsistency(playerId);
+                if (cancelled) return;
 
                 const skillsConfig = await getSkillsConfig();
+                if (cancelled) return;
 
+                setPlayer(mainEloData);
                 setMatches(data);
-
                 setExtendedStats(extendedData);
-
                 setSkills(skillsConfig);
             } catch (error) {
-                console.error(error);
+                console.error("[widget] failed to load player data:", error);
             }
         }
 
@@ -53,7 +62,10 @@ function App() {
             loadPlayer();
         }, 60000);
 
-        return () => clearInterval(interval);
+        return () => {
+            cancelled = true;
+            clearInterval(interval);
+        };
     }, [nickname]);
 
     return (
@@ -71,10 +83,10 @@ function App() {
             />
 
             <MainElo
+                player={player}
                 isLocked={isLocked}
                 widgetOrder={widgetOrder}
                 setWidgetOrder={setWidgetOrder}
-                nickname={nickname}
             />
 
             <RecentMatches

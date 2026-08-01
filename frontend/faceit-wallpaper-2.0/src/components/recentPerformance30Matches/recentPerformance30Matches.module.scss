@@ -22,7 +22,15 @@ p {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    height: 100%;
     gap: 15px;
+    justify-content: space-between;
+
+    .flexHeader {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
 
     .recentPerf {
         display: flex;
@@ -208,7 +216,6 @@ p {
         .chartElo {
             flex: 1 1 0%;
             min-width: 0;
-            user-select: none;
 
             .tickIconWrapper {
                 display: flex;
